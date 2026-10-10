@@ -159,12 +159,15 @@
   // ======================= ENTREGA =======================
   function deliverSheet(blob, name, note, tip) {
     const mb = blob.size / 1048576;
+    let podeCompartilhar = false;
+    try { podeCompartilhar = !!(navigator.canShare && navigator.canShare({ files: [new File([blob], name, { type: blob.type || 'application/octet-stream' })] })); } catch (e) { podeCompartilhar = false; }
+    const passos = podeCompartilhar ? '' : '<p class="note"><b>Para guardar fora do celular (Drive, OneDrive ou WhatsApp):</b> toque em <b>Baixar</b>. Depois abra <b>Meus Arquivos</b> › <b>Downloads</b>, toque e segure este arquivo e escolha <b>Compartilhar</b>.</p>';
     const s = sheet('<h3>Pronto!</h3><p><b>' + esc(name) + '</b><br><span class="note">' + (mb >= 0.1 ? fmtN(mb) + ' MB' : Math.max(1, Math.round(blob.size / 1024)) + ' KB') + '</span></p>' +
-      (note ? '<p class="note">' + note + '</p>' : '') + (tip ? '<p class="note">' + tip + '</p>' : '') +
-      '<div class="row-btns"><button class="btn" data-d="save">' + icon('download') + ' Baixar</button>' + (AC.exp.canShareFiles() ? '<button class="btn sec" data-d="share">' + icon('share') + ' Compartilhar</button>' : '') + '</div>');
+      (note ? '<p class="note">' + note + '</p>' : '') + (tip ? '<p class="note">' + tip + '</p>' : '') + passos +
+      '<div class="row-btns"><button class="btn" data-d="save">' + icon('download') + ' Baixar</button>' + (podeCompartilhar ? '<button class="btn sec" data-d="share">' + icon('share') + ' Compartilhar</button>' : '') + '</div>');
     s.el.addEventListener('click', async (e) => {
       const b = e.target.closest('[data-d]'); if (!b) return;
-      if (b.dataset.d === 'save') { AC.exp.saveBlob(blob, name); toast('Arquivo baixado. Veja em Downloads.'); }
+      if (b.dataset.d === 'save') { AC.exp.saveBlob(blob, name); toast(podeCompartilhar ? 'Arquivo baixado. Veja em Downloads.' : 'Baixado. Para guardar fora do celular: Meus Arquivos > Downloads > Compartilhar.', 6500); }
       else await AC.exp.shareBlob(blob, name, name);
     });
   }
