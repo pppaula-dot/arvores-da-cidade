@@ -5,7 +5,7 @@
   const AC = (root.AC = root.AC || {});
   const { esc, icon, starIcon, toast, sheet, confirmBox, urlOf } = AC.ui;
   const G = AC.geo;
-  const VERSION = '1.0.15 (teste)';
+  const VERSION = '1.0.16 (teste)';
   AC.VERSION = VERSION;
 
   const S = (AC.S = {
@@ -169,14 +169,14 @@
     return n.split(' ').every((w) => hay.includes(w));
   }
 
-  const HFLAGS = [['fav', 'Favoritas', 'star'], ['flor', 'Com flores'], ['fruto', 'Com frutos'], ['risco', 'Com atenção'], ['unk', 'Não identificadas']];
+  const HFLAGS = [['fav', 'Favoritas', 'star'], ['flor', 'Com flores'], ['fruto', 'Com frutos']];
   function homeControls() {
     let h = '<div class="seg">';
     [['cidades', 'Cidades', 'map'], ['especies', 'Espécies', 'leaf'], ['bairros', 'Bairros', 'pin']].forEach((m) => {
       h += '<button data-act="home-mode" data-v="' + m[0] + '" class="' + (S.homeMode === m[0] && !S.homeFlag ? 'on' : '') + '">' + (m[2] ? icon(m[2]) : '') + ' ' + m[1] + '</button>';
     });
-    h += '</div><div class="chips">';
-    HFLAGS.forEach((f) => { h += '<button class="chip' + (S.homeFlag === f[0] ? ' on' : '') + '" data-act="home-flag" data-v="' + f[0] + '">' + (f[2] ? icon(f[2]) : '') + f[1] + '</button>'; });
+    h += '</div><div class="chips wrap">';
+    HFLAGS.forEach((f) => { h += '<button class="chip' + (S.homeFlag === f[0] ? ' on' : '') + '" data-act="home-flag" data-v="' + f[0] + '">' + (f[2] ? icon(f[2]) : '') + f[1] + (S.homeFlag === f[0] ? ' ✕' : '') + '</button>'; });
     h += '<button class="chip" data-go="/perto">' + icon('pin') + 'Perto de mim</button></div>';
     return h;
   }
