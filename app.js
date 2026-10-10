@@ -5,7 +5,7 @@
   const AC = (root.AC = root.AC || {});
   const { esc, icon, starIcon, toast, sheet, confirmBox, urlOf } = AC.ui;
   const G = AC.geo;
-  const VERSION = '1.0.12 (teste)';
+  const VERSION = '1.0.13 (teste)';
   AC.VERSION = VERSION;
 
   const S = (AC.S = {
@@ -302,6 +302,7 @@
     if (latest) h += '<button class="hero" data-view="' + latest.id + '"><img alt="Foto da árvore" src="' + urlOf(latest.thumb) + '" data-full="' + latest.id + '"><span class="cnt">' + ps.length + ' foto' + (ps.length === 1 ? '' : 's') + '</span></button><div style="height:12px"></div>';
     h += '<div class="actions"><button class="btn" data-go="/visita/' + t.id + '">' + icon('camera') + ' Nova visita</button><button class="btn sec" data-act="card" data-id="' + t.id + '">' + icon('share') + ' Cartão</button>' +
       '<button class="btn sec" data-act="tree-pdf" data-id="' + t.id + '">' + icon('printer') + ' Ficha em PDF</button>' +
+      '<button class="btn sec" data-act="tree-send" data-id="' + t.id + '">' + icon('upload') + ' Enviar a outra pessoa</button>' +
       (hasCoord(t) ? '<button class="btn sec" data-act="open-map" data-id="' + t.id + '">' + icon('map') + ' Abrir no mapa</button>' : '<button class="btn sec" data-go="/editar/' + t.id + '">' + icon('pin') + ' Informar local</button>') + '</div>';
 
     h += '<section class="card tape"><h2>' + esc(nameOf(t)) + '</h2>' + (t.scientific ? '<div class="sci">' + esc(t.scientific) + '</div>' : '') + badgesHTML(t);
@@ -463,6 +464,16 @@
       } catch (e) { toast('Não consegui preparar o ponto: ' + e.message); }
     },
     'tree-pdf': (el) => AC.more.printTree(treeById(el.dataset.id)),
+    'tree-send': async (el) => {
+      const t = treeById(el.dataset.id); if (!t) return;
+      const prog = AC.ui.progress('Preparando a árvore…');
+      try {
+        const blob = await AC.exp.buildBackup((n, tot) => prog.set(n, tot, 'Foto ' + n + ' de ' + tot), [t.id]);
+        prog.close();
+        const nome = 'arvore-' + (t.species || 'nao-identificada').normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-zA-Z0-9]+/g, '-').toLowerCase() + '-' + (t.code || '') + '.zip';
+        AC.more.deliverSheet(blob, nome, 'Este arquivo leva a árvore com fotos e coordenadas.', 'A outra pessoa, no app dela, abre <b>Carimbo, backup e sobre</b>, toca em <b>Restaurar</b> e escolhe este arquivo. A árvore entra na lista dela e aparece em <b>Árvores perto de mim</b>.');
+      } catch (e) { try { prog.close(); } catch (_) { /* ok */ } toast('Não consegui preparar a árvore: ' + e.message); }
+    },
     'city-report': () => {
       const sel = document.getElementById('repB'); const b = sel ? sel.value : '';
       const ts = done().filter((t) => cityKey(t) === S.city.key && (!b || (t.neighborhood || 'Sem bairro') === b));

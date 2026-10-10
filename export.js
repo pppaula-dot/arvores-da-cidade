@@ -287,11 +287,13 @@
   }
 
   // ---------- Backup ----------
-  async function buildBackup(onProgress) {
-    const trees = await AC.db.allTrees();
-    const photos = await AC.db.allPhotos();
+  async function buildBackup(onProgress, treeIds) {
+    let trees = await AC.db.allTrees();
+    let photos = await AC.db.allPhotos();
+    const share = Array.isArray(treeIds) && treeIds.length > 0;
+    if (share) { const ids = new Set(treeIds); trees = trees.filter((t) => ids.has(t.id)); photos = photos.filter((p) => ids.has(p.treeId)); }
     const zip = new AC.zip.ZipWriter();
-    const meta = { seq: await AC.db.getMeta('seq', 0), stampOpts: await AC.db.getMeta('stampOpts', null) };
+    const meta = share ? { shared: true } : { seq: await AC.db.getMeta('seq', 0), stampOpts: await AC.db.getMeta('stampOpts', null) };
     const photoMeta = photos.map((p) => { const q = Object.assign({}, p); delete q.thumb; return q; });
     let n = 0;
     for (const p of photos) {
@@ -299,7 +301,7 @@
       if (b && b.orig) { const ext = extFor(b.orig); p.file = 'fotos/' + p.id + ext; photoMeta.find((q) => q.id === p.id).file = p.file; await zip.addFile(p.file, b.orig, p.takenAt); }
       n++; if (onProgress) onProgress(n, photos.length);
     }
-    await zip.addFile('dados.json', JSON.stringify({ app: 'arvores-da-cidade', version: 1, exportedAt: Date.now(), meta, trees, photos: photoMeta }));
+    await zip.addFile('dados.json', JSON.stringify({ app: 'arvores-da-cidade', version: 1, exportedAt: Date.now(), shared: share, creditos: 'Árvores Urbanas · @paulapmiranda', meta, trees, photos: photoMeta }));
     return zip.finish();
   }
 
@@ -313,9 +315,15 @@
     const existing = new Map((await AC.db.allTrees()).map((t) => [t.id, t]));
     let nt = 0, np = 0, i = 0;
     const total = data.photos.length;
+    const codesUsed = new Set([...existing.values()].map((t) => t.code).filter(Boolean));
     for (const t of data.trees) {
       const cur = existing.get(t.id);
-      if (!cur || (t.updatedAt || 0) > (cur.updatedAt || 0)) { await AC.db.put('trees', t); nt++; }
+      if (!cur && data.shared) {
+        // árvore recebida de outra pessoa: se o código já existe aqui, ganha um código novo para não misturar
+        if (t.code && codesUsed.has(t.code)) t.code = await AC.db.nextCode();
+        t.draft = false; t.received = true; t.receivedAt = Date.now();
+      }
+      if (!cur || (t.updatedAt || 0) > (cur.updatedAt || 0)) { await AC.db.put('trees', t); nt++; if (t.code) codesUsed.add(t.code); }
     }
     const treeMap = new Map(data.trees.map((t) => [t.id, t]));
     const havePhotos = new Set((await AC.db.allPhotos()).map((p) => p.id));
