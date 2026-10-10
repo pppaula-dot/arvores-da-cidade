@@ -5,7 +5,7 @@
   const AC = (root.AC = root.AC || {});
   const { esc, icon, starIcon, toast, sheet, confirmBox, urlOf } = AC.ui;
   const G = AC.geo;
-  const VERSION = '1.0.13 (teste)';
+  const VERSION = '1.0.14 (teste)';
   AC.VERSION = VERSION;
 
   const S = (AC.S = {
