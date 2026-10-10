@@ -16,8 +16,24 @@
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
+<div id="splash" aria-hidden="true"><div class="sp-in"><img src="icons/icon-192.png" alt="" width="112" height="112"><div class="sp-name">Árvores Urbanas</div><div class="sp-sub">caderno de campo</div></div><div class="sp-credit">Criado por @paulapmiranda<br><small>© 2026 · todos os direitos reservados</small></div></div>
 <div id="app"><div class="page"><div class="empty"><div class="big">Árvores Urbanas</div><p>Abrindo o caderno…</p></div></div></div>
 <noscript><p style="padding:20px">Este app precisa do JavaScript ligado no navegador.</p></noscript>
+<script>
+(function () {
+  var t0 = Date.now(), MIN = 2400, done = false;
+  window.AC = window.AC || {};
+  window.AC.hideSplash = function () {
+    if (done) return; done = true;
+    var left = Math.max(0, MIN - (Date.now() - t0));
+    setTimeout(function () {
+      var s = document.getElementById('splash'); if (!s) return;
+      s.classList.add('off'); setTimeout(function () { if (s.parentNode) s.parentNode.removeChild(s); }, 500);
+    }, left);
+  };
+  setTimeout(function () { window.AC.hideSplash(); }, 6000);
+})();
+</script>
 <script src="geo.js"></script>
 <script src="zip.js"></script>
 <script src="db.js"></script>
