@@ -12,7 +12,7 @@
   const photoTypeLabel = (k) => (PHOTO_TYPES.find((p) => p[0] === k) || [0, 'Foto'])[1];
   const ORIGIN_LABEL = { N: 'Nativa do Brasil', E: 'Exótica', C: 'Confirmar', '': 'Não informada' };
   const FRUIT_LABEL = { S: 'Sim', N: 'Não', '': 'Não informado' };
-  const treeName = (t) => t.species || 'Árvore não identificada';
+  const treeName = (t) => t.species || 'Não identificada';
   const cityKey = (t) => (t.city ? t.city + (t.state ? ' - ' + t.state : '') : 'Local pendente');
 
   const xmlEsc = (s) => String(s == null ? '' : s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&apos;' }[c]));
@@ -96,7 +96,7 @@
         k += '<Folder><name>' + xmlEsc(bairro) + '</name>\n';
         bm.get(bairro).forEach((t) => {
           const u = G().toUTM(t.lat, t.lng);
-          k += '<Placemark><name>' + xmlEsc((t.code ? t.code + ' · ' : '') + treeName(t)) + '</name>';
+          k += '<Placemark><name>' + xmlEsc(treeName(t)) + '</name>';
           k += '<description><![CDATA[' + describeTree(t, refsByTree && refsByTree.get(t.id)) + ']]></description>';
           k += '<styleUrl>#' + (t.favorite ? 'fav' : 'arv') + '</styleUrl>';
           k += '<ExtendedData><Data name="codigo"><value>' + xmlEsc(t.code) + '</value></Data><Data name="especie"><value>' + xmlEsc(treeName(t)) + '</value></Data>' +

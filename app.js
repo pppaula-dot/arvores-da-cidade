@@ -5,7 +5,7 @@
   const AC = (root.AC = root.AC || {});
   const { esc, icon, starIcon, toast, sheet, confirmBox, urlOf } = AC.ui;
   const G = AC.geo;
-  const VERSION = '1.0.7 (teste)';
+  const VERSION = '1.0.8 (teste)';
   AC.VERSION = VERSION;
 
   const S = (AC.S = {
@@ -431,14 +431,31 @@
     },
     'open-map': (el) => {
       const t = treeById(el.dataset.id); if (!t) return;
-      const ll = t.lat + ',' + t.lng;
-      const row = (href, label, sub) => '<a class="btn sec" style="display:block;margin:8px 0;text-align:left" target="_blank" rel="noopener" href="' + href + '"><b>' + label + '</b><br><small>' + sub + '</small></a>';
-      sheet('<h3>Abrir em…</h3>' +
-        row('https://earth.google.com/web/search/' + ll, 'Google Earth', 'Vista de satélite, no navegador') +
-        row('https://www.google.com/maps?q=' + ll, 'Google Maps', 'Mapa e rotas') +
+      const ll = t.lat + ',' + t.lng, label = encodeURIComponent(t.species || 'Não identificada');
+      const row = (href, label2, sub) => '<a class="btn sec" style="display:block;margin:8px 0;text-align:left" target="_blank" rel="noopener" href="' + href + '"><b>' + label2 + '</b><br><small>' + sub + '</small></a>';
+      const sh = sheet('<h3>Abrir em…</h3>' +
+        '<button class="btn sec" style="display:block;width:100%;margin:8px 0;text-align:left" data-earth="1"><b>Google Earth, com nome e fotos</b><br><small>Gera o ponto com o nome da árvore e escolhe o app</small></button>' +
+        row('https://earth.google.com/web/search/' + ll, 'Google Earth no navegador', 'Só a posição, sem nome') +
+        row('https://www.google.com/maps?q=' + ll + '(' + label + ')', 'Google Maps', 'Mapa e rotas, com o nome da árvore') +
         row('https://waze.com/ul?ll=' + ll + '&navigate=yes', 'Waze', 'Rotas até a árvore') +
-        row('geo:' + ll + '?q=' + ll, 'Outro aplicativo do celular', 'O Android mostra a lista de apps de mapa instalados') +
+        row('geo:' + ll + '?q=' + ll + '(' + label + ')', 'Outro aplicativo do celular', 'O Android mostra a lista de apps de mapa instalados') +
         '<p class="note">Para ver todas as árvores juntas no Google Earth, use Exportar › KMZ.</p><button class="btn ghost" data-close>Fechar</button>');
+      sh.el.querySelector('[data-earth]').addEventListener('click', () => { sh.close(); actions['open-earth']({ dataset: { id: t.id } }); });
+    },
+    'open-earth': async (el) => {
+      const t = treeById(el.dataset.id); if (!t) return;
+      try {
+        toast('Preparando o ponto…', 4000);
+        const { trees, by } = await AC.exp.loadAll((x) => x.id === t.id);
+        const r = await AC.exp.buildKMZ(trees, by, t.species || 'Não identificada');
+        const fname = (t.code || 'arvore') + '_' + (t.species || 'nao-identificada').normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-zA-Z0-9]+/g, '-').toLowerCase() + '.kmz';
+        const s = sheet('<h3>Pronto</h3><p><b>' + esc(t.species || 'Não identificada') + '</b><br><span class="note">Toque em Abrir e escolha o <b>Google Earth</b> na lista de aplicativos.</span></p>' +
+          '<div class="row-btns"><button class="btn" data-r="share">' + icon('map') + ' Abrir no Earth</button><button class="btn sec" data-r="save">' + icon('download') + ' Baixar</button></div><button class="btn ghost" data-close>Fechar</button>');
+        s.el.addEventListener('click', async (e) => {
+          const b = e.target.closest('[data-r]'); if (!b) return;
+          if (b.dataset.r === 'share') await AC.exp.shareBlob(r.blob, fname, t.species || 'Árvore'); else { AC.exp.saveBlob(r.blob, fname); toast('Arquivo baixado. Toque nele para abrir no Google Earth.'); }
+        });
+      } catch (e) { toast('Não consegui preparar o ponto: ' + e.message); }
     },
     'tree-pdf': (el) => AC.more.printTree(treeById(el.dataset.id)),
     'city-report': () => {
