@@ -60,6 +60,7 @@
     if (t.flowering) add('Flores', 'Sim' + (t.flowerColor ? ' (' + t.flowerColor + ')' : ''));
     if (t.fruiting) add('Frutos', 'Sim');
     add('Estado', t.health);
+    add('Atenção e manejo', (t.risks || []).join('; '));
     add('Tipo de local', t.placeType);
     add('Observações', t.notes);
     add('Primeiro registro', G().fmtDateTime(t.createdAt));
@@ -144,7 +145,7 @@
     ['Medicinal', (t) => (t.medicinal ? 'Sim' : ''), 's', 10], ['Ameaçada', (t) => (t.threatened ? 'Sim' : ''), 's', 10],
     ['Altura (m)', (t) => num(t.height), 'n', 10], ['Diâmetro do tronco (cm)', (t) => num(t.trunk), 'n', 14], ['Copa (m)', (t) => num(t.crown), 'n', 10],
     ['Flores', (t) => (t.flowering ? 'Sim' : 'Não'), 's', 8], ['Cor da flor', (t) => t.flowerColor, 's', 12], ['Frutos', (t) => (t.fruiting ? 'Sim' : 'Não'), 's', 8],
-    ['Estado', (t) => t.health, 's', 18], ['Tipo de local', (t) => t.placeType, 's', 18],
+    ['Estado', (t) => t.health, 's', 18], ['Atenção e manejo', (t) => (t.risks || []).join('; '), 's', 34], ['Tipo de local', (t) => t.placeType, 's', 18],
     ['Latitude', (t) => (G().validCoord(t.lat, t.lng) ? Math.round(t.lat * 1e7) / 1e7 : ''), 'n', 13], ['Longitude', (t) => (G().validCoord(t.lat, t.lng) ? Math.round(t.lng * 1e7) / 1e7 : ''), 'n', 13],
     ['UTM zona', (t) => (G().validCoord(t.lat, t.lng) ? (u(t).zone + u(t).band) : ''), 's', 10], ['UTM Leste (m)', (t) => (G().validCoord(t.lat, t.lng) ? Math.round(u(t).e) : ''), 'n', 13], ['UTM Norte (m)', (t) => (G().validCoord(t.lat, t.lng) ? Math.round(u(t).n) : ''), 'n', 13],
     ['Primeiro registro', (t) => G().fmtDateTime(t.createdAt), 's', 17], ['Última visita', (t) => G().fmtDateTime(lastVisit(t)), 's', 17], ['Nº de visitas', (t) => (t.visits || []).length, 'n', 10],

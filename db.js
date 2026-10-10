@@ -83,7 +83,7 @@
       origin: '', originConfirm: false, fruit: '', fruitConfirm: false, medicinal: false, threatened: false,
       height: '', trunk: '', crown: '',
       flowering: false, flowerColor: '', fruiting: false,
-      health: '', placeType: '', notes: '',
+      health: '', risks: [], placeType: '', notes: '',
       favorite: false, ignoreNearby: [],
       visits: [{ id: uid(), date: now, notes: '' }],
     };

@@ -18,6 +18,9 @@
   // ---------- salvar ----------
   async function saveNow() {
     if (!F.tree) return;
+    const t0 = F.tree;
+    if (F.kind === 'visit' && F.visit) { F.visit.flowering = !!t0.flowering; F.visit.fruiting = !!t0.fruiting; }
+    else if (t0.visits && t0.visits.length === 1) { t0.visits[0].flowering = !!t0.flowering; t0.visits[0].fruiting = !!t0.fruiting; }
     await AC.db.saveTree(F.tree);
     const el = $id('saveState');
     if (el) el.innerHTML = icon('check') + ' Salvo às ' + G.fmtTime(Date.now());
@@ -246,6 +249,10 @@
     h += sw('fruiting', t.fruiting, 'Com frutos agora');
     return h;
   }
+  function riskHTML() {
+    const cur = F.tree.risks || [];
+    return AC.RISKS.map((r, i) => '<button type="button" class="chip' + (cur.includes(r) ? ' on' : '') + '" data-act="f-risk" data-i="' + i + '">' + esc(r) + '</button>').join('');
+  }
   function renderBloom() { const el = $id('bloomSec'); if (el) el.innerHTML = bloomHTML(); }
 
   function formHTML() {
@@ -271,6 +278,7 @@
         '<div><label class="lbl" for="fC">Copa (m)</label><input class="inp" id="fC" data-f="crown" inputmode="decimal" value="' + esc(t.crown) + '" placeholder="5"></div></div><p class="note">Medidas aproximadas servem. Tronco = diâmetro à altura do peito.</p></section>';
       h += '<section class="card"><h3>Flores e frutos</h3><div id="bloomSec">' + bloomHTML() + '</div></section>';
       h += '<section class="card"><h3>Estado e local</h3><label class="lbl" for="fHealth">Estado da árvore</label><select class="inp" id="fHealth" data-f="health">' + opt('', t.health, 'Não informado') + AC.HEALTH.map((x) => opt(x, t.health)).join('') + '</select>' +
+        '<label class="lbl">Atenção e manejo <small>(marque o que se aplica)</small></label><div class="chips wrap" id="riskSec">' + riskHTML() + '</div>' +
         '<label class="lbl" for="fPT">Tipo de local</label><select class="inp" id="fPT" data-f="placeType">' + opt('', t.placeType, 'Não informado') + AC.PLACE_TYPES.map((x) => opt(x, t.placeType)).join('') + '</select>' +
         '<label class="lbl" for="fNotes">Observações</label><textarea class="inp" id="fNotes" data-f="notes" placeholder="O que chamou sua atenção nesta árvore?">' + esc(t.notes) + '</textarea></section>';
       h += '<button class="btn danger block" style="margin-top:6px" data-act="f-del">' + icon('trash') + (t.draft ? ' Descartar este cadastro' : ' Excluir esta árvore') + '</button>';
@@ -465,6 +473,12 @@
       await setCoord(fix.lat, fix.lng, fix.acc, 'gps');
       toast('Posição atualizada');
       await checkDuplicates();
+    },
+    'f-risk': (el) => {
+      const t = F.tree; if (!t) return; t.risks = t.risks || [];
+      const r = AC.RISKS[+el.dataset.i], k = t.risks.indexOf(r);
+      if (k >= 0) t.risks.splice(k, 1); else t.risks.push(r);
+      el.classList.toggle('on'); touch();
     },
     'f-map': pickOnMap,
     'f-typecoord': typeCoord,

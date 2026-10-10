@@ -5,7 +5,7 @@
   const AC = (root.AC = root.AC || {});
   const { esc, icon, starIcon, toast, sheet, confirmBox, urlOf } = AC.ui;
   const G = AC.geo;
-  const VERSION = '1.0.5 (teste)';
+  const VERSION = '1.0.6 (teste)';
   AC.VERSION = VERSION;
 
   const S = (AC.S = {
@@ -17,6 +17,7 @@
   const HEALTH = ['Boa', 'Regular', 'Ruim', 'Seca ou morta', 'Podada em excesso', 'Com praga ou doença'];
   const PLACE_TYPES = ['Calçada', 'Praça', 'Parque', 'Canteiro central', 'Quintal ou jardim', 'Margem de rio ou lago', 'Mata', 'Outro'];
   AC.HEALTH = HEALTH; AC.PLACE_TYPES = PLACE_TYPES;
+  AC.RISKS = ['Risco de queda', 'Doente ou com pragas', 'Precisa de poda', 'Atrapalha a fiação', 'Raízes danificam a calçada', 'Oca ou apodrecida'];
 
   // ---------- dados ----------
   async function refresh() {
@@ -49,17 +50,18 @@
     else if (t.origin === 'E') b += '<span class="badge exo' + (t.originConfirm ? ' cf' : '') + '">Exótica</span>';
     if (t.fruit === 'S') b += '<span class="badge fru">Frutífera</span>';
     if (!t.species) b += '<span class="badge warn">Não identificada</span>';
+    if ((t.risks || []).length) b += '<span class="badge warn">Atenção</span>';
     if (!hasCoord(t)) b += '<span class="badge warn">Sem coordenada</span>';
     if (t.placePending) b += '<span class="badge warn">Local pendente</span>';
     const n = (t.visits || []).length;
     if (n > 1) b += '<span class="badge">' + n + ' visitas</span>';
     return b ? '<div class="badges">' + b + '</div>' : '';
   }
-  function treeItemHTML(t) {
+  function treeItemHTML(t, extra) {
     const sub = [t.street, t.neighborhood].filter(Boolean).join(' · ') || (t.city ? cityKey(t) : 'Local ainda não informado');
     return '<button class="titem" data-go="/a/' + t.id + '">' + thumbHTML(t) +
       '<span class="t-main"><span class="t-name"><span class="nm">' + esc(nameOf(t)) + '</span>' + (t.favorite ? '<span class="st">' + starIcon(true) + '</span>' : '') + '</span>' +
-      '<span class="t-sub">' + esc(sub) + '</span>' + badgesHTML(t) + '</span></button>';
+      (extra ? '<span class="t-sub" style="display:block"><b>' + esc(extra) + '</b></span>' : '') + '<span class="t-sub">' + esc(sub) + '</span>' + badgesHTML(t) + '</span></button>';
   }
   const plural = (n, a, b) => n + ' ' + (n === 1 ? a : b);
 
@@ -84,6 +86,7 @@
       else if (first === 'editar') await AC.form.open(parts[1], 'tree');
       else if (first === 'visita') await AC.form.open(parts[1], 'visit');
       else if (first === 'numeros') await AC.more.renderStats(parts.slice(1).join('/'));
+      else if (first === 'perto') await renderNearby();
       else if (first === 'mais') await AC.more.renderSettings();
       else await renderHome();
     } catch (e) {
@@ -156,7 +159,7 @@
   const norm = (s) => AC.species.norm(s);
   function matchTree(t, q) {
     const n = norm(q); if (!n) return true;
-    const hay = norm([t.species, t.scientific, t.street, t.neighborhood, t.city, t.code, t.notes, t.health, t.placeType].join(' '));
+    const hay = norm([t.species, t.scientific, t.street, t.neighborhood, t.city, t.code, t.notes, t.health, (t.risks || []).join(' '), t.placeType].join(' '));
     return n.split(' ').every((w) => hay.includes(w));
   }
 
@@ -186,10 +189,34 @@
         if (f === 'unk' && t.species) return false;
         if (f === 'flor' && !t.flowering) return false;
         if (f === 'fruto' && !t.fruiting) return false;
+        if (f === 'risco' && !(t.risks || []).length) return false;
         if (f === 'nocoord' && hasCoord(t)) return false;
       }
       return true;
     });
+  }
+
+
+  // ---------- árvores perto de mim ----------
+  function getPos() {
+    return new Promise((res) => {
+      if (!navigator.geolocation) return res(null);
+      navigator.geolocation.getCurrentPosition((p) => res({ lat: p.coords.latitude, lng: p.coords.longitude, acc: p.coords.accuracy }), () => res(null), { enableHighAccuracy: true, timeout: 20000, maximumAge: 15000 });
+    });
+  }
+  const fmtDist = (m) => (m < 1000 ? Math.round(m / 5) * 5 + ' m' : (m / 1000).toFixed(m < 10000 ? 1 : 0).replace('.', ',') + ' km');
+  async function renderNearby() {
+    await refresh();
+    const head = topBar('Perto de mim', 'As árvores mais próximas', { back: true });
+    view().innerHTML = head + '<main class="page"><p class="note" id="nearMsg">Pegando a sua posição… (precisa do GPS ligado)</p><div id="nearBody"></div></main>';
+    const pos = await getPos();
+    const msg = document.getElementById('nearMsg'), body = document.getElementById('nearBody');
+    if (!msg || !body) return;
+    if (!pos) { msg.innerHTML = 'Não consegui o GPS. Ligue a localização do celular e permita o acesso para este app, depois volte aqui.'; return; }
+    const list = done().filter(hasCoord).map((t) => ({ t, d: AC.geo.haversine(pos.lat, pos.lng, t.lat, t.lng) })).sort((a, b) => a.d - b.d).slice(0, 40);
+    if (!list.length) { msg.textContent = 'Ainda não há árvores com coordenada.'; return; }
+    msg.textContent = 'Mostrando as ' + list.length + ' mais próximas, da mais perto para a mais longe. Precisão do GPS: ±' + Math.round(pos.acc) + ' m.';
+    body.innerHTML = '<div class="trees">' + list.map((x) => treeItemHTML(x.t, 'a ' + fmtDist(x.d))).join('') + '</div>';
   }
 
   async function renderCity(key) {
@@ -209,14 +236,14 @@
     if (st.tab === 'numeros') {
       h += '<div id="statsBox"></div></main>';
       view().innerHTML = h;
-      document.getElementById('statsBox').innerHTML = AC.more.statsHTML(all);
+      document.getElementById('statsBox').innerHTML = AC.more.statsHTML(all) + AC.more.reportCardHTML(all);
       return;
     }
     const bairros = [...new Set(all.map((t) => t.neighborhood || 'Sem bairro'))].sort((a, b) => a.localeCompare(b));
     const specs = [...new Set(all.map((t) => t.species || 'Não identificada'))].sort((a, b) => a.localeCompare(b));
     h += '<label class="searchbox">' + icon('search') + '<input id="cityQ" type="search" placeholder="Buscar nesta cidade…" value="' + esc(st.q) + '" autocomplete="off"></label>';
     const chip = (f, label, ic) => '<button class="chip' + (st.flags.has(f) ? ' on' : '') + '" data-flag="' + f + '">' + (ic ? icon(ic) : '') + label + '</button>';
-    h += '<div class="chips">' + chip('fav', 'Favoritas', 'star') + chip('unk', 'Não identificadas') + chip('flor', 'Com flores') + chip('fruto', 'Com frutos') + chip('nocoord', 'Sem coordenada') + '</div>';
+    h += '<div class="chips">' + chip('fav', 'Favoritas', 'star') + chip('unk', 'Não identificadas') + chip('flor', 'Com flores') + chip('fruto', 'Com frutos') + chip('risco', 'Com atenção') + chip('nocoord', 'Sem coordenada') + '</div>';
     h += '<div class="filters-row"><select class="sel" id="fBairro"><option value="">Todos os bairros</option>' + bairros.map((b) => '<option' + (st.bairro === b ? ' selected' : '') + '>' + esc(b) + '</option>').join('') + '</select>' +
       '<select class="sel" id="fSpecies"><option value="">Todas as espécies</option>' + specs.map((b) => '<option' + (st.species === b ? ' selected' : '') + '>' + esc(b) + '</option>').join('') + '</select></div>';
     h += '<div id="cityBody"></div></main><button class="btn fab" data-act="new-tree">' + icon('plus') + ' Nova árvore</button>';
@@ -279,7 +306,7 @@
     h += kv('Medicinal', t.medicinal ? 'Sim' : '') + kv('Ameaçada', t.threatened ? 'Sim' : '');
     h += kv('Altura', t.height ? esc(t.height) + ' m' : '') + kv('Tronco (diâmetro)', t.trunk ? esc(t.trunk) + ' cm' : '') + kv('Copa', t.crown ? esc(t.crown) + ' m' : '');
     h += kv('Flores', t.flowering ? 'Sim' + (t.flowerColor ? ' (' + esc(t.flowerColor) + ')' : '') : '') + kv('Frutos', t.fruiting ? 'Sim' : '');
-    h += kv('Estado', esc(t.health)) + kv('Tipo de local', esc(t.placeType)) + kv('Observações', esc(t.notes).replace(/\n/g, '<br>'));
+    h += kv('Estado', esc(t.health)) + kv('Atenção e manejo', esc((t.risks || []).join(' · '))) + kv('Tipo de local', esc(t.placeType)) + kv('Observações', esc(t.notes).replace(/\n/g, '<br>'));
     h += '</dl></section>';
 
     h += '<section class="card"><h3>Onde fica</h3><dl class="kv">';
@@ -363,6 +390,7 @@
     back: () => back('/'),
     menu: () => {
       const s = sheet('<h3>Menu</h3><div class="menu">' +
+        '<button class="btn sec" data-m="/perto">' + icon('locate') + '<span class="m-t">Árvores perto de mim<small>Das mais próximas às mais longe</small></span></button>' +
         '<button class="btn sec" data-m="/numeros">' + icon('chart') + '<span class="m-t">Números de tudo<small>Espécies, bairros, ruas</small></span></button>' +
         '<button class="btn sec" data-m="export">' + icon('download') + '<span class="m-t">Exportar tudo<small>Google Earth, planilha, fotos</small></span></button>' +
         '<button class="btn sec" data-m="/mais">' + icon('stamp') + '<span class="m-t">Carimbo, backup e sobre</span></button></div>');
@@ -413,6 +441,11 @@
         '<p class="note">Para ver todas as árvores juntas no Google Earth, use Exportar › KMZ.</p><button class="btn ghost" data-close>Fechar</button>');
     },
     'tree-pdf': (el) => AC.more.printTree(treeById(el.dataset.id)),
+    'city-report': () => {
+      const sel = document.getElementById('repB'); const b = sel ? sel.value : '';
+      const ts = done().filter((t) => cityKey(t) === S.city.key && (!b || (t.neighborhood || 'Sem bairro') === b));
+      AC.more.printReport(ts, (b ? b + ' · ' : '') + S.city.key);
+    },
     'city-export': () => {
       const key = S.city.key;
       AC.more.exportSheet({ title: key, slug: AC.exp.slug(key), filter: (t) => cityKey(t) === key });

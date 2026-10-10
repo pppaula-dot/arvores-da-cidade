@@ -256,3 +256,8 @@ body:has(.savebar) #toast { bottom: calc(150px + var(--safe-b)); }
   #printArea img.th { width: 46pt; height: 46pt; object-fit: cover; }
   @page { size: A4; margin: 14mm; }
 }
+
+.chips.wrap { flex-wrap: wrap; overflow: visible; margin: 0; padding: 2px 0 6px; }
+.lbl small { font-weight: 400; color: var(--muted); }
+#printArea svg.croqui { width: 100%; height: auto; border: .5pt solid #bbb; }
+#printArea .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10pt; }
