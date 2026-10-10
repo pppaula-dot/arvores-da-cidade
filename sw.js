@@ -1,7 +1,7 @@
 /* Árvores Urbanas — service worker: guarda o app no aparelho para abrir sem internet. */
-const CACHE = 'arvores-da-cidade-v1.0.6';
+const CACHE = 'arvores-da-cidade-v1.0.7';
 const FILES = ['./', 'index.html', 'style.css', 'geo.js', 'zip.js', 'db.js', 'ui.js', 'species.js', 'stamp.js', 'place.js', 'export.js', 'map.js', 'app.js', 'form.js', 'more.js',
-  'manifest.webmanifest', 'icons/icon-192.png', 'icons/icon-512.png', 'icons/icon-maskable-512.png', 'icons/apple-touch-icon.png', 'icons/icon-32.png'];
+  'manifest.webmanifest', 'fonts/Mali-Regular.ttf', 'fonts/Mali-Bold.ttf', 'icons/icon-192.png', 'icons/icon-512.png', 'icons/icon-maskable-512.png', 'icons/apple-touch-icon.png', 'icons/icon-32.png'];
 
 self.addEventListener('install', (e) => {
   e.waitUntil(caches.open(CACHE).then((c) => c.addAll(FILES)).then(() => self.skipWaiting()));
