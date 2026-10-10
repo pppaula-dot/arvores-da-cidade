@@ -3,9 +3,10 @@
   --ink: #2f4a3a; --leaf: #4f7a3b; --leaf-d: #36561f; --leaf-l: #e3edd3;
   --paper: #f3ead3; --card: #fffaf0; --line: #d9cca4; --sepia: #6b4f2a; --muted: #7d7358;
   --red: #b5412f; --red-d: #8a2e20; --hl: #f3d36b; --gold: #d9a400; --blue: #3f6f8a;
-  --hand: "Caveat", "Segoe Print", "Bradley Hand", "Dancing Script", "Comic Sans MS", cursive;
-  --serif: Georgia, "Noto Serif", "Times New Roman", serif;
-  --sans: Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font: system-ui, sans-serif; /* uma única fonte: a do próprio aparelho */
+  --hand: var(--font);
+  --serif: var(--font);
+  --sans: var(--font);
   --safe-b: env(safe-area-inset-bottom, 0px);
   color-scheme: light;
 }
@@ -120,7 +121,7 @@ button { cursor: pointer; }
 .kv { display: grid; grid-template-columns: 112px 1fr; gap: 6px 10px; font-size: 15px; margin: 0; }
 .kv dt { color: var(--muted); font-family: var(--sans); font-size: 13px; padding-top: 2px; }
 .kv dd { margin: 0; word-break: break-word; }
-.mono { font-family: "Courier New", ui-monospace, monospace; font-size: 14px; }
+.mono { font-family: var(--font); font-variant-numeric: tabular-nums; font-size: 15px; letter-spacing: .2px; }
 .actions { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 0 0 12px; }
 .actions .btn { min-height: 52px; }
 .actions .full { grid-column: 1 / -1; }
@@ -230,8 +231,8 @@ body:has(.savebar) #toast { bottom: calc(150px + var(--safe-b)); }
 .viewer .v-top { display: flex; align-items: center; gap: 6px; padding: 8px; color: #fff; }
 .viewer .v-top .ibtn { color: #fff; }
 .viewer .v-top .v-t { flex: 1; font-family: var(--sans); font-size: 14px; }
-.viewer .v-img { flex: 1; min-height: 0; display: grid; place-items: center; overflow: auto; }
-.viewer .v-img img { max-width: 100%; max-height: 100%; object-fit: contain; }
+.viewer .v-img { flex: 1; min-height: 0; position: relative; overflow: hidden; }
+.viewer .v-img img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; }
 .viewer .v-bot { display: flex; gap: 8px; padding: 10px 10px calc(10px + var(--safe-b)); flex-wrap: wrap; }
 .viewer .v-bot .btn { flex: 1 1 130px; min-height: 44px; }
 

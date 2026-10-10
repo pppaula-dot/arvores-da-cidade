@@ -5,7 +5,7 @@
   const AC = (root.AC = root.AC || {});
   const { esc, icon, starIcon, toast, sheet, confirmBox, urlOf } = AC.ui;
   const G = AC.geo;
-  const VERSION = '1.0 (teste)';
+  const VERSION = '1.0.3 (teste)';
   AC.VERSION = VERSION;
 
   const S = (AC.S = {
@@ -270,7 +270,7 @@
     if (latest) h += '<button class="hero" data-view="' + latest.id + '"><img alt="Foto da árvore" src="' + urlOf(latest.thumb) + '" data-full="' + latest.id + '"><span class="cnt">' + ps.length + ' foto' + (ps.length === 1 ? '' : 's') + '</span></button><div style="height:12px"></div>';
     h += '<div class="actions"><button class="btn" data-go="/visita/' + t.id + '">' + icon('camera') + ' Nova visita</button><button class="btn sec" data-act="card" data-id="' + t.id + '">' + icon('share') + ' Cartão</button>' +
       '<button class="btn sec" data-act="tree-pdf" data-id="' + t.id + '">' + icon('printer') + ' Ficha em PDF</button>' +
-      (hasCoord(t) ? '<a class="btn sec" href="https://www.google.com/maps?q=' + t.lat + ',' + t.lng + '" target="_blank" rel="noopener">' + icon('map') + ' Abrir no mapa</a>' : '<button class="btn sec" data-go="/editar/' + t.id + '">' + icon('pin') + ' Informar local</button>') + '</div>';
+      (hasCoord(t) ? '<button class="btn sec" data-act="open-map" data-id="' + t.id + '">' + icon('map') + ' Abrir no mapa</button>' : '<button class="btn sec" data-go="/editar/' + t.id + '">' + icon('pin') + ' Informar local</button>') + '</div>';
 
     h += '<section class="card tape"><h2>' + esc(nameOf(t)) + '</h2>' + (t.scientific ? '<div class="sci">' + esc(t.scientific) + '</div>' : '') + badgesHTML(t);
     h += '<dl class="kv" style="margin-top:10px">';
@@ -400,6 +400,17 @@
           if (b.dataset.r === 'share') await AC.exp.shareBlob(blob, fname, nameOf(t)); else AC.exp.saveBlob(blob, fname);
         });
       } catch (e) { toast('Não consegui montar o cartão: ' + e.message); }
+    },
+    'open-map': (el) => {
+      const t = treeById(el.dataset.id); if (!t) return;
+      const ll = t.lat + ',' + t.lng;
+      const row = (href, label, sub) => '<a class="btn sec" style="display:block;margin:8px 0;text-align:left" target="_blank" rel="noopener" href="' + href + '"><b>' + label + '</b><br><small>' + sub + '</small></a>';
+      sheet('<h3>Abrir em…</h3>' +
+        row('https://earth.google.com/web/search/' + ll, 'Google Earth', 'Vista de satélite, no navegador') +
+        row('https://www.google.com/maps?q=' + ll, 'Google Maps', 'Mapa e rotas') +
+        row('https://waze.com/ul?ll=' + ll + '&navigate=yes', 'Waze', 'Rotas até a árvore') +
+        row('geo:' + ll + '?q=' + ll, 'Outro aplicativo do celular', 'O Android mostra a lista de apps de mapa instalados') +
+        '<p class="note">Para ver todas as árvores juntas no Google Earth, use Exportar › KMZ.</p><button class="btn ghost" data-close>Fechar</button>');
     },
     'tree-pdf': (el) => AC.more.printTree(treeById(el.dataset.id)),
     'city-export': () => {
