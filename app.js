@@ -5,7 +5,7 @@
   const AC = (root.AC = root.AC || {});
   const { esc, icon, starIcon, toast, sheet, confirmBox, urlOf } = AC.ui;
   const G = AC.geo;
-  const VERSION = '1.0.9 (teste)';
+  const VERSION = '1.0.10 (teste)';
   AC.VERSION = VERSION;
 
   const S = (AC.S = {
@@ -121,6 +121,9 @@
 
   async function renderHome() {
     await refresh();
+    // cadastros vazios (abriu "Nova árvore" e voltou sem preencher nada) não ficam sobrando
+    const vazios = drafts().filter((t) => !photosOf(t.id).length && !t.species && !t.notes && !hasCoord(t) && !t.street && !t.neighborhood);
+    if (vazios.length) { for (const t of vazios) await AC.db.deleteTree(t.id); await refresh(); }
     const items = done(), dr = drafts();
     const groups = new Map();
     items.forEach((t) => { const k = cityKey(t); if (!groups.has(k)) groups.set(k, []); groups.get(k).push(t); });

@@ -1,6 +1,6 @@
 /* Árvores Urbanas — visual de caderno de campo */
-@font-face { font-family: "Mali"; font-weight: 400; font-style: normal; font-display: swap; src: url("fonts/Mali-Regular.ttf") format("truetype"); }
-@font-face { font-family: "Mali"; font-weight: 500 700; font-style: normal; font-display: swap; src: url("fonts/Mali-Bold.ttf") format("truetype"); }
+@font-face { font-family: "Mali"; font-weight: 400; font-style: normal; font-display: block; src: url("fonts/Mali-Regular.ttf") format("truetype"); }
+@font-face { font-family: "Mali"; font-weight: 500 700; font-style: normal; font-display: block; src: url("fonts/Mali-Bold.ttf") format("truetype"); }
 :root {
   --ink: #2f4a3a; --leaf: #4f7a3b; --leaf-d: #36561f; --leaf-l: #e3edd3;
   --paper: #f3ead3; --card: #fffaf0; --line: #d9cca4; --sepia: #6b4f2a; --muted: #7d7358;
