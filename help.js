@@ -13,7 +13,7 @@
       'Tudo é salvo sozinho, não tem botão “salvar”.'] },
     { c: '#c98a1a', t: 'Achar as árvores', l: [
       'Na tela inicial: <b>Cidades · Espécies · Bairros</b>.', 'Atalhos: <b>Favoritas</b>, <b>Com flores</b>, <b>Com frutos</b>.',
-      '<b>Perto de mim</b> (menu ⋮) lista das mais próximas.', 'Dentro da cidade: Lista, Mapa e Números.', 'A lupa busca por espécie, rua ou bairro.'] },
+      '<b>Perto de mim</b> (menu, os três pontinhos no canto de cima) lista das mais próximas.', 'Dentro da cidade: Lista, Mapa e Números.', 'A lupa busca por espécie, rua ou bairro.'] },
     { c: '#b5533c', t: 'Voltar à mesma árvore', l: [
       'Abra a árvore e toque em <b>Nova visita</b>.', 'O app guarda o histórico: data, fotos, floração e frutos.',
       'Se você cadastrar uma árvore já registrada ali perto, ele avisa.'] },
