@@ -5,7 +5,7 @@
   const AC = (root.AC = root.AC || {});
   const { esc, icon, starIcon, toast, sheet, confirmBox, urlOf } = AC.ui;
   const G = AC.geo;
-  const VERSION = '1.0.17 (teste)';
+  const VERSION = 'V1';
   AC.VERSION = VERSION;
 
   const S = (AC.S = {
@@ -87,6 +87,7 @@
       else if (first === 'visita') await AC.form.open(parts[1], 'visit');
       else if (first === 'numeros') await AC.more.renderStats(parts.slice(1).join('/'));
       else if (first === 'perto') await renderNearby();
+      else if (first === 'ajuda') AC.help.renderHelp();
       else if (first === 'mais') await AC.more.renderSettings();
       else await renderHome();
     } catch (e) {
@@ -442,6 +443,7 @@
         '<button class="btn sec" data-m="/perto">' + icon('locate') + '<span class="m-t">Árvores perto de mim<small>Das mais próximas às mais longe</small></span></button>' +
         '<button class="btn sec" data-m="/numeros">' + icon('chart') + '<span class="m-t">Números de tudo<small>Espécies, bairros, ruas</small></span></button>' +
         '<button class="btn sec" data-m="export">' + icon('download') + '<span class="m-t">Exportar tudo<small>Google Earth, planilha, fotos</small></span></button>' +
+        '<button class="btn sec" data-m="/ajuda">' + icon('leaf') + '<span class="m-t">Como usar o app<small>Manual e novidades</small></span></button>' +
         '<button class="btn sec" data-m="/mais">' + icon('stamp') + '<span class="m-t">Carimbo, backup e sobre</span></button></div>');
       s.el.addEventListener('click', (e) => {
         const b = e.target.closest('[data-m]'); if (!b) return;
@@ -557,6 +559,7 @@
     if (actions[a]) actions[a](el, e);
     else if (AC.more && AC.more.actions[a]) AC.more.actions[a](el, e);
     else if (AC.form && AC.form.actions[a]) AC.form.actions[a](el, e);
+    else if (AC.help && AC.help.actions[a]) AC.help.actions[a](el, e);
   }
 
   // ---------- início ----------

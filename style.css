@@ -280,3 +280,22 @@ body:has(.savebar) #toast { bottom: calc(150px + var(--safe-b)); }
 .bk-line span { flex: 1; }
 .bk-line b { color: var(--leaf-d); }
 .banner.warn { border-color: var(--red); background: #fbe9e1; }
+
+/* ---- Como usar (mapa mental) ---- */
+.hp-center { text-align: center; background: #2f4a3a; color: #fff; border-radius: 22px; padding: 14px 10px; margin: 0 0 12px; }
+.hp-center b { display: block; font-family: var(--font); font-size: 22px; }
+.hp-center small { opacity: .8; }
+.hp-grid { display: grid; grid-template-columns: 1fr; gap: 10px; }
+.hp-b { background: var(--card); border-left: 8px solid var(--bc); border-radius: 14px; padding: 10px 12px; margin-bottom: 10px; box-shadow: 0 1px 3px rgba(0,0,0,.12); }
+.hp-grid .hp-b { margin-bottom: 0; }
+.hp-b h3 { margin: 0 0 4px; color: var(--bc); font-size: 17px; }
+.hp-b ul, .hp-ch ul { margin: 0; padding-left: 18px; font-size: 14.5px; line-height: 1.45; }
+.hp-ch h3 { margin: 8px 0 4px; } .hp-ch small { font-weight: 400; color: var(--muted); }
+@media print { #printArea .hp-print { font-size: 10pt; }
+  #printArea .hp-center { background: #2f4a3a !important; color: #fff !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; padding: 6pt; border-radius: 10pt; margin: 4pt 0 8pt; text-align: center; }
+  #printArea .hp-center b { font-size: 18pt; display: block; }
+  #printArea .hp-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6pt; }
+  #printArea .hp-b { border-left: 6pt solid var(--bc); padding: 4pt 7pt; margin: 0 0 6pt; break-inside: avoid; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  #printArea .hp-b h3 { font-size: 11.5pt; margin: 0 0 2pt; color: var(--bc); }
+  #printArea .hp-b ul, #printArea .hp-ch ul { font-size: 9pt; margin: 0; padding-left: 12pt; line-height: 1.3; }
+}

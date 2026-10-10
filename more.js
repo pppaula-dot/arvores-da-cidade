@@ -341,5 +341,5 @@
     'st-restamp': restampAll,
   };
 
-  AC.more = { deliverSheet, statsHTML, renderStats, reportCardHTML, printReport, exportSheet, printTree, printCity, renderSettings, backupFlow, actions };
+  AC.more = { printHTML, deliverSheet, statsHTML, renderStats, reportCardHTML, printReport, exportSheet, printTree, printCity, renderSettings, backupFlow, actions };
 })(typeof window !== 'undefined' ? window : globalThis);
