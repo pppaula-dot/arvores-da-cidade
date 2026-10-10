@@ -1,4 +1,4 @@
-/* Árvores da Cidade — geo.js
+/* Árvores Urbanas — geo.js
    Coordenadas, UTM (SIRGAS 2000), distâncias, leitura de EXIF e geometria simples. */
 (function (root) {
   'use strict';

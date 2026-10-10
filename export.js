@@ -1,4 +1,4 @@
-/* Árvores da Cidade — export.js
+/* Árvores Urbanas — export.js
    KMZ (Google Earth, com fotos), KML, planilha Excel (.xlsx) e CSV, pacote de fotos, cartão para compartilhar,
    backup e restauração. */
 (function (root) {
@@ -84,8 +84,8 @@
       bm.get(b).push(t);
     });
     let k = '<?xml version="1.0" encoding="UTF-8"?>\n<kml xmlns="http://www.opengis.net/kml/2.2"><Document>\n';
-    k += '<name>' + xmlEsc(docName || 'Árvores da Cidade') + '</name>\n';
-    k += '<description>Criado com Árvores da Cidade · @paulapmiranda</description>\n';
+    k += '<name>' + xmlEsc(docName || 'Árvores Urbanas') + '</name>\n';
+    k += '<description>Criado com Árvores Urbanas · @paulapmiranda</description>\n';
     k += '<Style id="arv"><IconStyle><scale>1.1</scale><Icon><href>http://maps.google.com/mapfiles/kml/paddle/grn-circle.png</href></Icon></IconStyle><LabelStyle><scale>0.8</scale></LabelStyle></Style>\n';
     k += '<Style id="fav"><IconStyle><scale>1.2</scale><Icon><href>http://maps.google.com/mapfiles/kml/paddle/ylw-stars.png</href></Icon></IconStyle><LabelStyle><scale>0.8</scale></LabelStyle></Style>\n';
     [...groups.keys()].sort((a, b) => a.localeCompare(b)).forEach((city) => {
@@ -281,7 +281,7 @@
     x.fillText(G().fmtDate(tree.createdAt), 110, y);
     if (tree.favorite) { x.fillStyle = '#e0a800'; x.font = '60px Georgia, serif'; x.textAlign = 'right'; x.fillText('★', 990, textTop); x.textAlign = 'left'; }
     x.fillStyle = 'rgba(47,74,58,0.7)'; x.font = '27px Georgia, serif'; x.textAlign = 'center';
-    x.fillText('Árvores da Cidade  ·  @paulapmiranda', W / 2, H - 40);
+    x.fillText('Árvores Urbanas  ·  @paulapmiranda', W / 2, H - 40);
     return AC.stamp.canvasToBlob(c, 0.9);
   }
 
@@ -305,9 +305,9 @@
   async function restoreBackup(file, onProgress) {
     const entries = await AC.zip.readZip(file);
     const dados = entries.find((e) => e.name === 'dados.json');
-    if (!dados) throw new Error('Este arquivo não parece um backup do Árvores da Cidade.');
+    if (!dados) throw new Error('Este arquivo não parece um backup do Árvores Urbanas.');
     const data = JSON.parse(await dados.text());
-    if (data.app !== 'arvores-da-cidade') throw new Error('Este arquivo não parece um backup do Árvores da Cidade.');
+    if (data.app !== 'arvores-da-cidade') throw new Error('Este arquivo não parece um backup do Árvores Urbanas.');
     const byName = new Map(entries.map((e) => [e.name, e]));
     const existing = new Map((await AC.db.allTrees()).map((t) => [t.id, t]));
     let nt = 0, np = 0, i = 0;

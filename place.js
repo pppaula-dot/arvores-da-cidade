@@ -1,4 +1,4 @@
-/* Árvores da Cidade — place.js
+/* Árvores Urbanas — place.js
    Descobre cidade, bairro e rua a partir da coordenada (OpenStreetMap/Nominatim) quando há internet.
    Sem internet, a árvore fica com "local pendente" e é completada sozinha quando o celular conectar. */
 (function (root) {

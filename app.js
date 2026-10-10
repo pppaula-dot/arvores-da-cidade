@@ -1,11 +1,11 @@
-/* Árvores da Cidade — app.js
+/* Árvores Urbanas — app.js
    Núcleo: dados em memória, rotas, tela inicial, cidade, detalhe da árvore e visualizador de fotos. */
 (function (root) {
   'use strict';
   const AC = (root.AC = root.AC || {});
   const { esc, icon, starIcon, toast, sheet, confirmBox, urlOf } = AC.ui;
   const G = AC.geo;
-  const VERSION = '1.0.3 (teste)';
+  const VERSION = '1.0.4 (teste)';
   AC.VERSION = VERSION;
 
   const S = (AC.S = {
@@ -124,7 +124,7 @@
     const keys = [...groups.keys()].sort((a, b) => (a === 'Local pendente') - (b === 'Local pendente') || a.localeCompare(b));
     const speciesN = new Set(items.filter((t) => t.species).map((t) => t.species.toLowerCase())).size;
     const sub = items.length ? plural(items.length, 'árvore', 'árvores') + ' · ' + plural(groups.size - (groups.has('Local pendente') ? 1 : 0), 'cidade', 'cidades') + ' · ' + plural(speciesN, 'espécie', 'espécies') : 'Seu caderno de árvores';
-    let h = topBar('Árvores da Cidade', sub, { right: '<button class="ibtn" data-act="menu" aria-label="Menu">' + icon('more') + '</button>' });
+    let h = topBar('Árvores Urbanas', sub, { right: '<button class="ibtn" data-act="menu" aria-label="Menu">' + icon('more') + '</button>' });
     h += '<main class="page">';
     dr.forEach((t) => {
       h += '<div class="banner leafy"><span>' + icon('pencil') + '</span><div class="b-txt"><b>Cadastro em andamento</b><br>' + esc(t.species || 'Árvore sem nome ainda') + ' · ' + photosOf(t.id).length + ' foto(s)' +

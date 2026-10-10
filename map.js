@@ -1,4 +1,4 @@
-/* Árvores da Cidade — map.js
+/* Árvores Urbanas — map.js
    Mapa simples (arrastar, pinça, toque duplo, botões + e −) com fundo do OpenStreetMap.
    Funciona sem internet: o fundo não carrega, mas os pontos continuam aparecendo. */
 (function (root) {

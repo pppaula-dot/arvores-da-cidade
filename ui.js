@@ -1,4 +1,4 @@
-/* Árvores da Cidade — ui.js
+/* Árvores Urbanas — ui.js
    Peças de interface: ícones, avisos, janelas, confirmação, progresso. */
 (function (root) {
   'use strict';

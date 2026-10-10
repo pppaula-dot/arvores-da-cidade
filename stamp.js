@@ -1,4 +1,4 @@
-/* Árvores da Cidade — stamp.js
+/* Árvores Urbanas — stamp.js
    Carimbo nas fotos, no mesmo molde do app Ficha Campo – Acompanhamento:
    faixa escura translúcida na base, texto branco alinhado à direita, fonte sem negrito;
    linhas: data/hora, UTM (SIRGAS 2000) com precisão, latitude/longitude e local.

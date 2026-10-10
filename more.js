@@ -1,4 +1,4 @@
-/* Árvores da Cidade — more.js
+/* Árvores Urbanas — more.js
    Números (estatísticas), exportação, ficha em PDF (impressão), carimbo, backup e sobre. */
 (function (root) {
   'use strict';
@@ -174,7 +174,7 @@
       }
       h += '</div>';
     }
-    h += '<div class="foot">Árvores da Cidade · @paulapmiranda · gerado em ' + G.fmtDateTime(Date.now()) + '</div>';
+    h += '<div class="foot">Árvores Urbanas · @paulapmiranda · gerado em ' + G.fmtDateTime(Date.now()) + '</div>';
     await printHTML(h);
     setTimeout(() => urls.forEach((u) => URL.revokeObjectURL(u)), 120000);
   }
@@ -189,7 +189,7 @@
       h += '<tr><td style="width:50pt">' + (pick ? '<img class="th" alt="" src="' + urlOf(pick.thumb) + '">' : '') + '</td><td><b>' + esc(t.species || 'Não identificada') + '</b>' + (t.scientific ? '<br><i>' + esc(t.scientific) + '</i>' : '') + '<br>' + esc(t.code || '') +
         '</td><td>' + esc([t.street, t.neighborhood].filter(Boolean).join(', ')) + '</td><td>' + (hasCoord(t) ? G.fmtLatLon(t.lat, t.lng) + '<br>' + esc(AC.stamp.utmText(t.lat, t.lng)) : '—') + '</td><td>' + G.fmtDate(t.createdAt) + '</td></tr>';
     });
-    h += '</tbody></table><div class="foot">Árvores da Cidade · @paulapmiranda</div>';
+    h += '</tbody></table><div class="foot">Árvores Urbanas · @paulapmiranda</div>';
     await printHTML(h);
   }
 
@@ -207,7 +207,7 @@
     h += '<section class="card"><h3>Backup</h3><p class="note">' + (last ? 'Último backup: ' + G.fmtDateTime(last) + '.' : 'Você ainda não fez backup.') + ' O arquivo guarda todas as árvores e fotos originais. Guarde no Drive ou mande para você mesma no WhatsApp.</p>' +
       '<div class="row-btns" style="margin-top:6px"><button class="btn" data-act="backup-now">' + icon('save') + ' Salvar backup</button><label class="btn sec" style="cursor:pointer">' + icon('upload') + ' Restaurar<input id="restoreIn" type="file" accept=".zip,application/zip" hidden></label></div></section>';
     if (pend) h += '<section class="card"><h3>Local pendente</h3><p class="note">' + plural(pend, 'árvore espera', 'árvores esperam') + ' internet para descobrir cidade e bairro.</p><button class="btn sec block" data-act="resolve-places">Buscar agora</button></section>';
-    h += '<section class="card"><h3>Sobre</h3><p style="margin:0 0 6px"><b>Árvores da Cidade</b> · versão ' + esc(AC.VERSION) + '</p><p class="note" style="margin-top:0">Criado por @paulapmiranda.</p>' +
+    h += '<section class="card"><h3>Sobre</h3><p style="margin:0 0 6px"><b>Árvores Urbanas</b> · versão ' + esc(AC.VERSION) + '</p><p class="note" style="margin-top:0">Criado por @paulapmiranda.</p>' +
       '<p class="note">Seus registros e fotos ficam só neste aparelho. O app usa a internet apenas para o fundo do mapa e para descobrir o nome do lugar e informações da espécie.</p></section>';
     h += '</main>';
     document.getElementById('app').innerHTML = h;

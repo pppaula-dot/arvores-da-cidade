@@ -1,4 +1,4 @@
-/* Árvores da Cidade — species.js
+/* Árvores Urbanas — species.js
    Lista de árvores comuns em ruas, praças e quintais do Brasil, com origem (nativa do Brasil ou exótica)
    e se é frutífera. Funciona sem internet. Para espécies fora da lista, o app tenta buscar na internet
    (GBIF + Wikipédia) quando houver sinal e marca o resultado como "confirmar".

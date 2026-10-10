@@ -1,4 +1,4 @@
-/* Árvores da Cidade — zip.js
+/* Árvores Urbanas — zip.js
    Escrita (sem compressão — fotos JPEG já são comprimidas) e leitura de arquivos .zip. */
 (function (root) {
   'use strict';

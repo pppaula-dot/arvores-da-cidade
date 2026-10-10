@@ -1,4 +1,4 @@
-/* Árvores da Cidade — db.js
+/* Árvores Urbanas — db.js
    Armazenamento no próprio aparelho (IndexedDB). Tudo é salvo na hora, sem botão "salvar". */
 (function (root) {
   'use strict';
