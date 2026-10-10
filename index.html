@@ -23,7 +23,7 @@
 <noscript><p style="padding:20px">Este app precisa do JavaScript ligado no navegador.</p></noscript>
 <script>
 (function () {
-  var t0 = Date.now(), MIN = 2400, done = false;
+  var t0 = Date.now(), MIN = 4000, done = false;
   window.AC = window.AC || {};
   window.AC.hideSplash = function () {
     if (done) return; done = true;
@@ -33,7 +33,7 @@
       s.classList.add('off'); setTimeout(function () { if (s.parentNode) s.parentNode.removeChild(s); }, 500);
     }, left);
   };
-  setTimeout(function () { window.AC.hideSplash(); }, 6000);
+  setTimeout(function () { window.AC.hideSplash(); }, 7000);
 })();
 </script>
 <script src="geo.js"></script>
