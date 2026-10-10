@@ -5,7 +5,7 @@
   const AC = (root.AC = root.AC || {});
   const { esc, icon, starIcon, toast, sheet, confirmBox, urlOf } = AC.ui;
   const G = AC.geo;
-  const VERSION = '1.0.10 (teste)';
+  const VERSION = '1.0.11 (teste)';
   AC.VERSION = VERSION;
 
   const S = (AC.S = {
@@ -110,13 +110,15 @@
     const n = done().length;
     if (!n) return '';
     const last = await AC.db.getMeta('lastBackup', 0);
-    const newest = Math.max(...done().map((t) => t.updatedAt || 0));
-    const oldest = Math.min(...done().map((t) => t.createdAt || Date.now()));
+    const changed = last ? done().filter((t) => (t.updatedAt || 0) > last).length : n;
     const days = last ? Math.floor((Date.now() - last) / 86400000) : null;
-    if (last && (days < 14 || newest <= last)) return '';
-    if (!last && n < 5 && Date.now() - oldest < 3 * 86400000) return '';
-    const txt = last ? 'Faz ' + days + ' dias do seu último backup e há registros novos.' : 'Você ainda não fez backup. Se o celular for trocado ou o app apagado, os registros se perdem.';
-    return '<div class="banner"><span>' + icon('save') + '</span><div class="b-txt">' + txt + '<div class="b-act"><button class="btn sm" data-act="backup-now">Fazer backup agora</button></div></div></div>';
+    const when = last ? (days === 0 ? 'hoje ' : days === 1 ? 'ontem ' : 'há ' + days + ' dias, ') + G.fmtTime(last) : 'nunca';
+    const precisa = last ? (changed >= 5 || (days >= 7 && changed >= 1)) : n >= 3;
+    if (precisa) {
+      const txt = last ? 'Você tem ' + changed + (changed === 1 ? ' árvore nova ou alterada' : ' árvores novas ou alteradas') + ' desde o último backup (' + when + '). Se o celular se perder, elas se perdem.' : 'Você ainda não fez backup. Se o celular for trocado, perdido ou o app apagado, os registros se perdem.';
+      return '<div class="banner warn"><span>' + icon('save') + '</span><div class="b-txt">' + txt + '<div class="b-act"><button class="btn sm" data-act="backup-now">Fazer backup agora</button></div></div></div>';
+    }
+    return '<button class="bk-line" data-act="backup-now">' + icon('save') + '<span>Último backup: ' + when + '</span><b>Fazer agora</b></button>';
   }
 
   async function renderHome() {
