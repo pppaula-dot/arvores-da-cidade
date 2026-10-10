@@ -5,13 +5,13 @@
   const AC = (root.AC = root.AC || {});
   const { esc, icon, starIcon, toast, sheet, confirmBox, urlOf } = AC.ui;
   const G = AC.geo;
-  const VERSION = '1.0.14 (teste)';
+  const VERSION = '1.0.15 (teste)';
   AC.VERSION = VERSION;
 
   const S = (AC.S = {
     trees: [], photos: new Map(), cleanup: null, deferredPrompt: null,
     city: { key: '', tab: 'lista', q: '', bairro: '', species: '', flags: new Set() },
-    homeQ: '',
+    homeQ: '', homeMode: 'cidades', homeSel: '', homeFlag: '',
   });
 
   const HEALTH = ['Boa', 'Regular', 'Ruim', 'Seca ou morta', 'Podada em excesso', 'Com praga ou doença'];
@@ -144,6 +144,7 @@
       '<div class="b-act"><button class="btn sm sec" data-act="resolve-places">Tentar agora</button></div></div></div>';
     if (items.length) {
       h += '<label class="searchbox">' + icon('search') + '<input id="homeSearch" type="search" placeholder="Buscar espécie, rua, bairro…" value="' + esc(S.homeQ) + '" autocomplete="off"></label>';
+      h += homeControls();
       h += '<div id="homeBody">' + homeBody(groups, keys) + '</div>';
     } else if (!dr.length) {
       h += '<div class="empty">' + icon('leaf') + '<div class="big">Seu caderno está vazio</div><p>Toque em <b>Nova árvore</b>, tire uma foto ou escolha uma do celular. O app descobre sozinho a cidade e o bairro pelo GPS.</p></div>';
@@ -168,12 +169,54 @@
     return n.split(' ').every((w) => hay.includes(w));
   }
 
+  const HFLAGS = [['fav', 'Favoritas', 'star'], ['flor', 'Com flores'], ['fruto', 'Com frutos'], ['risco', 'Com atenção'], ['unk', 'Não identificadas']];
+  function homeControls() {
+    let h = '<div class="seg">';
+    [['cidades', 'Cidades', 'map'], ['especies', 'Espécies', 'leaf'], ['bairros', 'Bairros', 'pin']].forEach((m) => {
+      h += '<button data-act="home-mode" data-v="' + m[0] + '" class="' + (S.homeMode === m[0] && !S.homeFlag ? 'on' : '') + '">' + (m[2] ? icon(m[2]) : '') + ' ' + m[1] + '</button>';
+    });
+    h += '</div><div class="chips">';
+    HFLAGS.forEach((f) => { h += '<button class="chip' + (S.homeFlag === f[0] ? ' on' : '') + '" data-act="home-flag" data-v="' + f[0] + '">' + (f[2] ? icon(f[2]) : '') + f[1] + '</button>'; });
+    h += '<button class="chip" data-go="/perto">' + icon('pin') + 'Perto de mim</button></div>';
+    return h;
+  }
+  function homeGroupKey(t, mode) {
+    if (mode === 'especies') return t.species || 'Não identificada';
+    return (t.neighborhood || 'Sem bairro') + ' · ' + cityKey(t);
+  }
+  const homeFlagOk = (t, f) => (f === 'fav' ? t.favorite : f === 'flor' ? t.flowering : f === 'fruto' ? t.fruiting : f === 'risco' ? (t.risks || []).length : f === 'unk' ? !t.species : true);
+
   function homeBody(groups, keys) {
     const q = S.homeQ.trim();
+    const list = (res, title) => '<p class="count-line">' + title + '</p><div class="trees">' + res.map((t) => treeItemHTML(t)).join('') + '</div>';
     if (q) {
       const res = done().filter((t) => matchTree(t, q)).sort((a, b) => b.updatedAt - a.updatedAt);
       if (!res.length) return '<p class="note">Nada encontrado para “' + esc(q) + '”.</p>';
-      return '<p class="count-line">' + plural(res.length, 'árvore encontrada', 'árvores encontradas') + '</p><div class="trees">' + res.map(treeItemHTML).join('') + '</div>';
+      return list(res, plural(res.length, 'árvore encontrada', 'árvores encontradas'));
+    }
+    if (S.homeFlag) {
+      const name = (HFLAGS.find((f) => f[0] === S.homeFlag) || [0, ''])[1];
+      const res = done().filter((t) => homeFlagOk(t, S.homeFlag)).sort((a, b) => b.updatedAt - a.updatedAt);
+      if (!res.length) return '<p class="note">Nenhuma árvore em “' + esc(name) + '” por enquanto.</p>';
+      return list(res, plural(res.length, 'árvore', 'árvores') + ' · ' + esc(name));
+    }
+    if (S.homeMode !== 'cidades') {
+      const all = done();
+      if (S.homeSel) {
+        const res = all.filter((t) => homeGroupKey(t, S.homeMode) === S.homeSel).sort((a, b) => b.updatedAt - a.updatedAt);
+        return '<button class="btn sm sec" data-act="home-sel" data-v="">← ' + (S.homeMode === 'especies' ? 'Todas as espécies' : 'Todos os bairros') + '</button>' +
+          list(res, '<b>' + esc(S.homeSel) + '</b> · ' + plural(res.length, 'árvore', 'árvores'));
+      }
+      const g = new Map();
+      all.forEach((t) => { const k = homeGroupKey(t, S.homeMode); if (!g.has(k)) g.set(k, []); g.get(k).push(t); });
+      const ks = [...g.keys()].sort((a, b) => (/^(Não identificada|Sem bairro)/.test(a) ? 1 : 0) - (/^(Não identificada|Sem bairro)/.test(b) ? 1 : 0) || a.localeCompare(b));
+      return '<div class="cities">' + ks.map((k) => {
+        const ts = g.get(k);
+        const small = S.homeMode === 'especies'
+          ? plural(new Set(ts.map((t) => cityKey(t))).size, 'cidade', 'cidades')
+          : plural(new Set(ts.map((t) => (t.species || '').toLowerCase()).filter(Boolean)).size, 'espécie', 'espécies');
+        return '<button class="city" data-act="home-sel" data-v="' + esc(k) + '"><span class="c-name">' + esc(k) + '<small>' + small + '</small></span><span class="c-n">' + ts.length + '</span></button>';
+      }).join('') + '</div>';
     }
     return '<div class="cities">' + keys.map((k) => {
       const ts = groups.get(k), pend = k === 'Local pendente';
@@ -489,6 +532,9 @@
       try { await S.deferredPrompt.userChoice; } catch (e) { /* ok */ }
       S.deferredPrompt = null; render();
     },
+    'home-mode': (el) => { S.homeMode = el.dataset.v; S.homeSel = ''; S.homeFlag = ''; S.homeQ = ''; render(); },
+    'home-sel': (el) => { S.homeSel = el.dataset.v; render(); window.scrollTo(0, 0); },
+    'home-flag': (el) => { S.homeFlag = S.homeFlag === el.dataset.v ? '' : el.dataset.v; S.homeSel = ''; render(); },
     'backup-now': () => AC.more.backupFlow(),
     'resolve-places': async () => {
       if (navigator.onLine === false) { toast('Sem internet agora. Tente de novo quando conectar.'); return; }
