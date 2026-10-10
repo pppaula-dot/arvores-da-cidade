@@ -28,7 +28,7 @@ button { cursor: pointer; }
 /* ---------- barra do topo ---------- */
 .top { position: sticky; top: 0; z-index: 20; display: flex; align-items: center; gap: 6px; padding: 8px 10px 8px 8px; min-height: 58px;
   background: rgba(243, 234, 211, .96); backdrop-filter: blur(4px); border-bottom: 2px solid var(--line); }
-.top h1 { flex: 1; margin: 0; font-family: var(--hand); font-size: 30px; font-weight: 700; line-height: 1.05; color: var(--ink); min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.top h1 { flex: 1; margin: 0; font-family: var(--hand); font-size: 25px; font-weight: 700; line-height: 1.05; color: var(--ink); min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .top h1 small { display: block; font-family: var(--serif); font-size: 12.5px; font-weight: 400; color: var(--muted); }
 .ibtn { width: 46px; height: 46px; border-radius: 14px; border: 0; background: transparent; display: grid; place-items: center; color: var(--ink); }
 .ibtn:active { background: rgba(0, 0, 0, .08); }
@@ -55,7 +55,7 @@ button { cursor: pointer; }
 
 /* ---------- fichas (cartões de papel) ---------- */
 .card { position: relative; background: var(--card); border: 1.5px solid var(--line); border-radius: 14px; padding: 14px 14px; margin: 0 0 12px; box-shadow: 0 2px 0 rgba(120, 100, 50, .12), 0 6px 14px rgba(90, 70, 20, .07); }
-.card h2, .card h3 { margin: 0 0 8px; font-family: var(--hand); font-size: 26px; line-height: 1.1; color: var(--ink); }
+.card h2, .card h3 { margin: 0 0 8px; font-family: var(--hand); font-size: 20px; line-height: 1.1; color: var(--ink); }
 .card h3 { font-size: 22px; }
 .note { color: var(--muted); font-size: 14px; margin: 6px 0; }
 .note.warn { color: var(--red-d); }
@@ -74,11 +74,11 @@ button { cursor: pointer; }
 .city { display: flex; align-items: center; gap: 12px; width: 100%; text-align: left; background: var(--card); border: 1.5px solid var(--line); border-left: 8px solid var(--leaf); border-radius: 12px; padding: 12px 14px; box-shadow: 0 3px 0 rgba(120, 100, 50, .14); }
 .city:active { transform: translateY(2px); box-shadow: 0 1px 0 rgba(120, 100, 50, .14); }
 .city.pend { border-left-color: var(--hl); background: #fff8dc; }
-.city .c-name { font-family: var(--hand); font-size: 26px; font-weight: 700; line-height: 1.05; flex: 1; min-width: 0; }
-.city .c-name small { display: block; font-family: var(--serif); font-weight: 400; font-size: 13px; color: var(--muted); }
-.city .c-n { font-family: var(--hand); font-size: 34px; font-weight: 700; color: var(--leaf-d); min-width: 38px; text-align: right; }
+.city .c-name { font-family: var(--hand); font-size: 19px; font-weight: 700; line-height: 1.05; flex: 1; min-width: 0; }
+.city .c-name small { display: block; font-family: var(--serif); font-weight: 400; font-size: 12.5px; color: var(--muted); }
+.city .c-n { font-family: var(--hand); font-size: 26px; font-weight: 700; color: var(--leaf-d); min-width: 38px; text-align: right; }
 .empty { text-align: center; padding: 34px 18px; color: var(--muted); }
-.empty .big { font-family: var(--hand); font-size: 30px; color: var(--ink); margin-bottom: 6px; }
+.empty .big { font-family: var(--hand); font-size: 24px; color: var(--ink); margin-bottom: 6px; }
 .empty .ic { width: 54px; height: 54px; color: var(--leaf); margin-bottom: 8px; }
 
 /* ---------- lista de árvores ---------- */
@@ -100,7 +100,7 @@ button { cursor: pointer; }
 .thumb { width: 68px; height: 68px; border-radius: 10px; object-fit: cover; background: var(--leaf-l); flex: none; display: grid; place-items: center; color: var(--leaf); overflow: hidden; border: 1px solid var(--line); }
 .thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
 .titem .t-main { flex: 1; min-width: 0; }
-.titem .t-name { font-family: var(--hand); font-size: 24px; font-weight: 700; line-height: 1.05; display: flex; align-items: center; gap: 6px; }
+.titem .t-name { font-family: var(--hand); font-size: 18px; font-weight: 700; line-height: 1.05; display: flex; align-items: center; gap: 6px; }
 .titem .t-name .nm { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .titem .t-name .st { color: var(--gold); flex: none; }
 .titem .t-name .st .ic { width: 18px; height: 18px; }
@@ -126,7 +126,7 @@ button { cursor: pointer; }
 .actions .btn { min-height: 52px; }
 .actions .full { grid-column: 1 / -1; }
 .visit { border-left: 4px solid var(--leaf); padding: 2px 0 2px 12px; margin: 0 0 14px; }
-.visit h4 { margin: 0 0 6px; font-family: var(--hand); font-size: 22px; }
+.visit h4 { margin: 0 0 6px; font-family: var(--hand); font-size: 17px; }
 .pgrid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
 .pgrid .p { position: relative; aspect-ratio: 1; border-radius: 10px; overflow: hidden; border: 1.5px solid var(--line); background: #dfe7d2; padding: 0; }
 .pgrid .p img { width: 100%; height: 100%; object-fit: cover; display: block; }
@@ -173,7 +173,7 @@ textarea.inp { min-height: 90px; resize: vertical; }
 /* ---------- estatísticas ---------- */
 .tiles { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin: 0 0 12px; }
 .tile { background: var(--card); border: 1.5px solid var(--line); border-radius: 14px; padding: 10px 12px; box-shadow: 0 3px 0 rgba(120, 100, 50, .12); }
-.tile .n { font-family: var(--hand); font-size: 40px; font-weight: 700; line-height: 1; color: var(--leaf-d); }
+.tile .n { font-family: var(--hand); font-size: 30px; font-weight: 700; line-height: 1; color: var(--leaf-d); }
 .tile .l { font-family: var(--sans); font-size: 12.5px; color: var(--muted); margin-top: 2px; }
 .bars { display: grid; gap: 8px; }
 .bar .b-h { display: flex; justify-content: space-between; gap: 10px; font-size: 14.5px; }
@@ -215,7 +215,7 @@ textarea.inp { min-height: 90px; resize: vertical; }
 .sheet-wrap.on .sheet-bg { opacity: 1; }
 .sheet-wrap.on .sheet { transform: translateY(0); }
 .sheet-wrap.full .sheet { height: 94vh; max-height: 94vh; }
-.sheet h3 { margin: 0 0 6px; font-family: var(--hand); font-size: 28px; }
+.sheet h3 { margin: 0 0 6px; font-family: var(--hand); font-size: 21px; }
 .menu { display: grid; gap: 8px; margin-top: 8px; }
 .menu .btn { justify-content: flex-start; text-align: left; font-weight: 600; }
 .menu .btn small { display: block; font-weight: 400; opacity: .85; font-size: 12.5px; }
