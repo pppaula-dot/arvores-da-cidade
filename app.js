@@ -122,6 +122,14 @@
     return '<button class="bk-line" data-act="backup-now">' + icon('save') + '<span>Último backup: ' + when + '</span><b>Fazer agora</b></button>';
   }
 
+  function guideLine() {
+    let seen = null; try { seen = localStorage.getItem('ac_help_seen'); } catch (e) { /* ok */ }
+    const first = seen === null, nova = !first && seen !== VERSION;
+    const t = first ? 'Primeiros passos' : nova ? 'Novidades da ' + VERSION : 'Como usar e novidades';
+    const sub = first ? 'veja como usar o app' : nova ? 'toque para ver o que mudou' : 'manual e o que mudou';
+    return '<button class="bk-line guide' + (first || nova ? ' hot' : '') + '" data-go="/ajuda">' + icon('leaf') + '<span><b>' + t + '</b> · ' + sub + '</span>' + (first || nova ? '<em class="newtag">Novo</em>' : '') + '</button>';
+  }
+
   async function renderHome() {
     await refresh();
     // cadastros vazios (abriu "Nova árvore" e voltou sem preencher nada) não ficam sobrando
@@ -140,6 +148,7 @@
         '<div class="b-act"><button class="btn sm" data-go="/editar/' + t.id + '">Continuar</button><button class="btn sm sec" data-act="discard" data-id="' + t.id + '">Descartar</button></div></div></div>';
     });
     h += await backupBanner();
+    h += guideLine();
     const pend = items.filter((t) => t.placePending && hasCoord(t)).length;
     if (pend) h += '<div class="banner"><span>' + icon('pin') + '</span><div class="b-txt">' + plural(pend, 'árvore está', 'árvores estão') + ' esperando internet para descobrir a cidade e o bairro. Isso acontece sozinho quando o celular conectar.' +
       '<div class="b-act"><button class="btn sm sec" data-act="resolve-places">Tentar agora</button></div></div></div>';

@@ -33,10 +33,21 @@
   ];
   const DONTS = ['Não apague o app sem fazer backup.', 'Não limpe os dados do navegador sem backup.', 'Não precisa ficar online para cadastrar.'];
   const CHANGES = [
-    { v: 'V2', d: '14/10/2026', l: ['Botão <b>Todas no Google Earth</b> na tela inicial: abre todas as árvores cadastradas de uma vez.'] },
+    { v: 'V2', d: '14/10/2026', l: [
+      'Nova faixa <b>Como usar e novidades</b> na tela inicial. <i>Como usar:</i> toque nela para ver os primeiros passos, o manual e o que mudou. Ela mostra “Novo” quando há novidade.',
+      'Botão <b>Todas no Google Earth</b>. <i>Como usar:</i> na tela inicial, toque nele, depois em <b>Abrir no Earth</b> e escolha o Google Earth. Todas as árvores aparecem no mapa.'] },
     { v: 'V1', d: '10/10/2026', l: ['Primeira versão para compartilhar.', 'Cadastro com foto, GPS e carimbo na foto.', 'Cidades, Espécies, Bairros, Perto de mim, mapa e números.',
       'Histórico de visitas, aviso de árvore repetida, favoritas, flores e frutos.', 'Google Earth, KMZ, planilha, PDF e envio de árvore para outra pessoa.', 'Backup e restauração.'] },
   ];
+
+  const STEPS = [
+    '<b>Instale o app:</b> abra o link no Chrome (Android) e toque em <b>Instalar o app</b>. No iPhone, use o Safari: Compartilhar › Adicionar à Tela de Início.',
+    '<b>Cadastre a primeira árvore:</b> toque em <b>Nova árvore</b> e tire uma foto. Permita o GPS quando o celular pedir.',
+    '<b>Confira os dados:</b> o app preenche cidade, bairro e rua sozinho. Escreva o nome da árvore, ou deixe em branco se não souber.',
+    '<b>Veja no mapa:</b> volte à tela inicial e entre na cidade, ou toque em <b>Todas no Google Earth</b>.',
+    '<b>Faça backup:</b> toque em <b>Fazer agora</b> na tela inicial e guarde o arquivo em lugar seguro.',
+  ];
+  function stepsHTML() { return '<div class="hp-steps"><h3>Primeiros passos</h3><ol>' + STEPS.map((x) => '<li>' + x + '</li>').join('') + '</ol></div>'; }
 
   function mapHTML(print) {
     const br = BRANCHES.map((b) => '<div class="hp-b" style="--bc:' + b.c + '"><h3>' + b.t + '</h3><ul>' + b.l.map((x) => '<li>' + x + '</li>').join('') + '</ul></div>').join('');
@@ -48,14 +59,15 @@
   }
 
   function renderHelp() {
+    try { localStorage.setItem('ac_help_seen', AC.VERSION); } catch (e) { /* ok */ }
     const el = document.getElementById('app');
-    el.innerHTML = AC.topBar('Como usar', 'Manual rápido', { back: true }) + '<main class="page">' + mapHTML() +
+    el.innerHTML = AC.topBar('Como usar', 'Manual rápido', { back: true }) + '<main class="page">' + stepsHTML() + mapHTML() +
       '<section class="card"><h3>O que mudou</h3>' + changesHTML() + '</section>' +
       '<button class="btn block" data-act="help-print">' + icon('download') + ' Salvar manual em PDF (A4)</button>' +
       '<p class="credit">Criado por @paulapmiranda · © ' + new Date().getFullYear() + '</p></main>';
   }
   const actions = {
-    'help-print': () => AC.more.printHTML('<div class="hp-print"><h1>Árvores Urbanas · como usar</h1><p class="sub">Criado por @paulapmiranda · © ' + new Date().getFullYear() + ' · ' + esc(AC.VERSION) + '</p>' + mapHTML(true) + '<h2>O que mudou</h2>' + changesHTML() + '</div>'),
+    'help-print': () => AC.more.printHTML('<div class="hp-print"><h1>Árvores Urbanas · como usar</h1><p class="sub">Criado por @paulapmiranda · © ' + new Date().getFullYear() + ' · ' + esc(AC.VERSION) + '</p>' + stepsHTML() + mapHTML(true) + '<h2>O que mudou</h2>' + changesHTML() + '</div>'),
   };
   AC.help = { renderHelp, actions };
 })(typeof window !== 'undefined' ? window : globalThis);
