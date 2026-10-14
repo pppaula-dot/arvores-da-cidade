@@ -19,7 +19,7 @@
       'Se você cadastrar uma árvore já registrada ali perto, ele avisa.'] },
     { c: '#2f7f86', t: 'Mapas e Google Earth', l: [
       'O mapa do app mostra seus pontos.', 'Em cada árvore: abrir no <b>Google Earth</b>, Google Maps, Waze ou app de mapas.',
-      'Em <b>Exportar</b>: arquivo KMZ para o Earth, planilha e fotos.'] },
+      'Na tela inicial: <b>Todas no Google Earth</b> mostra todas as árvores de uma vez.', 'Em <b>Exportar</b>: arquivo KMZ para o Earth, planilha e fotos.'] },
     { c: '#7a5aa6', t: 'Compartilhar', l: [
       'Na árvore: <b>Enviar a outra pessoa</b> gera um arquivo com fotos e coordenadas.',
       'Mande pelo WhatsApp (Meus Arquivos › Compartilhar).', 'A outra pessoa abre <b>Carimbo, backup e sobre › Restaurar</b>.',
@@ -33,6 +33,7 @@
   ];
   const DONTS = ['Não apague o app sem fazer backup.', 'Não limpe os dados do navegador sem backup.', 'Não precisa ficar online para cadastrar.'];
   const CHANGES = [
+    { v: 'V2', d: '14/10/2026', l: ['Botão <b>Todas no Google Earth</b> na tela inicial: abre todas as árvores cadastradas de uma vez.'] },
     { v: 'V1', d: '10/10/2026', l: ['Primeira versão para compartilhar.', 'Cadastro com foto, GPS e carimbo na foto.', 'Cidades, Espécies, Bairros, Perto de mim, mapa e números.',
       'Histórico de visitas, aviso de árvore repetida, favoritas, flores e frutos.', 'Google Earth, KMZ, planilha, PDF e envio de árvore para outra pessoa.', 'Backup e restauração.'] },
   ];

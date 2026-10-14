@@ -5,7 +5,7 @@
   const AC = (root.AC = root.AC || {});
   const { esc, icon, starIcon, toast, sheet, confirmBox, urlOf } = AC.ui;
   const G = AC.geo;
-  const VERSION = 'V1';
+  const VERSION = 'V2';
   AC.VERSION = VERSION;
 
   const S = (AC.S = {
@@ -178,7 +178,8 @@
     });
     h += '</div><div class="chips wrap">';
     HFLAGS.forEach((f) => { h += '<button class="chip' + (S.homeFlag === f[0] ? ' on' : '') + '" data-act="home-flag" data-v="' + f[0] + '">' + (f[2] ? icon(f[2]) : '') + f[1] + (S.homeFlag === f[0] ? ' ✕' : '') + '</button>'; });
-    h += '<button class="chip" data-go="/perto">' + icon('pin') + 'Perto de mim</button></div>';
+    h += '<button class="chip" data-go="/perto">' + icon('pin') + 'Perto de mim</button>' +
+      '<button class="chip" data-act="earth-all">' + icon('map') + 'Todas no Google Earth</button></div>';
     return h;
   }
   function homeGroupKey(t, mode) {
@@ -507,6 +508,23 @@
           if (b.dataset.r === 'share') await AC.exp.shareBlob(r.blob, fname, t.species || 'Árvore'); else { AC.exp.saveBlob(r.blob, fname); toast('Arquivo baixado. Toque nele para abrir no Google Earth.'); }
         });
       } catch (e) { toast('Não consegui preparar o ponto: ' + e.message); }
+    },
+    'earth-all': async () => {
+      const com = done().filter(hasCoord);
+      if (!com.length) { toast('Ainda não há árvores com coordenada para mostrar.'); return; }
+      const prog = AC.ui.progress('Preparando todas as árvores…');
+      try {
+        const { trees, by } = await AC.exp.loadAll((x) => !x.draft);
+        const r = await AC.exp.buildKMZ(trees, by, 'Árvores Urbanas', (n, tot) => prog.set(n, tot, 'Foto ' + n + ' de ' + tot));
+        prog.close();
+        const fname = 'arvores-urbanas-' + AC.geo.isoDate(Date.now()) + '.kmz';
+        const s = sheet('<h3>Pronto</h3><p><b>' + plural(com.length, 'árvore', 'árvores') + '</b> no mapa.<br><span class="note">Toque em Abrir e escolha o <b>Google Earth</b> na lista de aplicativos.</span></p>' +
+          '<div class="row-btns"><button class="btn" data-r="share">' + icon('map') + ' Abrir no Earth</button><button class="btn sec" data-r="save">' + icon('download') + ' Baixar</button></div><button class="btn ghost" data-close>Fechar</button>');
+        s.el.addEventListener('click', async (e) => {
+          const b = e.target.closest('[data-r]'); if (!b) return;
+          if (b.dataset.r === 'share') await AC.exp.shareBlob(r.blob, fname, 'Árvores Urbanas'); else { AC.exp.saveBlob(r.blob, fname); toast('Arquivo baixado. Toque nele para abrir no Google Earth.'); }
+        });
+      } catch (e) { try { prog.close(); } catch (_) { /* ok */ } toast('Não consegui preparar o arquivo: ' + (e && e.message), 5000); }
     },
     'tree-pdf': (el) => AC.more.printTree(treeById(el.dataset.id)),
     'tree-send': async (el) => {
