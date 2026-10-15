@@ -1,0 +1,60 @@
+/* Árvores Urbanas — site (página inicial). O app mora em /app/. */
+@font-face { font-family: "Mali"; font-weight: 400; font-style: normal; font-display: swap; src: url("app/fonts/Mali-Regular.ttf") format("truetype"); }
+@font-face { font-family: "Mali"; font-weight: 600 700; font-style: normal; font-display: swap; src: url("app/fonts/Mali-Bold.ttf") format("truetype"); }
+/* Layout: uma folha de caderno de campo, coluna única com margem vermelha; seções como fichas presas na página. */
+:root {
+  --paper: #f3ead3; --card: #fffaf0; --ink: #2f4a3a; --muted: #6f6650; --line: #d9cca4;
+  --leaf: #4f7a3b; --leaf-d: #36561f; --leaf-l: #e3edd3; --margin: rgba(181,65,47,.30); --rule: rgba(70,110,130,.14);
+  --flower: #d9a400; --on-leaf: #ffffff; --title: #36561f;
+  color-scheme: light;
+  --font: "Mali", "Segoe Print", "Comic Sans MS", system-ui, sans-serif;
+}
+ * { box-sizing: border-box }
+body { margin: 0; font-family: var(--font); font-size: 17px; line-height: 1.5; color: var(--ink); background-color: var(--paper);
+  background-image: linear-gradient(to right, transparent 0 27px, var(--margin) 27px 29px, transparent 29px),
+    repeating-linear-gradient(to bottom, transparent 0 31px, var(--rule) 31px 32px); }
+.wrap { max-width: 760px; margin: 0 auto; padding-block: 18px 40px;
+  padding-left: max(40px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-top: calc(18px + env(safe-area-inset-top, 0px));
+  display: flex; flex-direction: column; gap: 22px }
+h1, h2, h3 { text-wrap: balance; margin: 0; line-height: 1.12 }
+nav { display: flex; flex-wrap: wrap; gap: 6px 14px; font-size: 15px }
+nav a { color: var(--ink); text-decoration: none; border-bottom: 2px dotted var(--line) }
+nav a:hover, nav a:focus-visible { border-color: var(--leaf) }
+.hero { display: grid; gap: 14px; padding-top: 6px }
+.hero .eyebrow { font-size: 14px; color: var(--muted); letter-spacing: .04em }
+.hero h1 { font-size: clamp(38px, 9vw, 62px); font-weight: 700; color: var(--title) }
+.hero h1 em { font-style: normal; background: linear-gradient(transparent 62%, var(--flower) 62% 88%, transparent 88%); padding: 0 4px }
+.hero p { margin: 0; max-width: 34em; font-size: 18px }
+.btns { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 4px }
+.btn { display: inline-flex; align-items: center; gap: 8px; min-height: 50px; padding: 10px 20px; border-radius: 14px; border: 2px solid var(--leaf-d);
+  background: var(--leaf); color: var(--on-leaf); font: inherit; font-weight: 700; text-decoration: none; box-shadow: 0 4px 0 var(--leaf-d); cursor: pointer }
+.btn:active { transform: translateY(3px); box-shadow: 0 1px 0 var(--leaf-d) }
+.btn.sec { background: var(--card); color: var(--ink); border-color: var(--line); box-shadow: 0 4px 0 var(--line) }
+.btn:focus-visible, nav a:focus-visible, button:focus-visible { outline: 3px solid var(--flower); outline-offset: 2px }
+.ficha { background: var(--card); border: 1.5px solid var(--line); border-radius: 14px; padding: 18px; position: relative;
+  box-shadow: 0 2px 0 rgba(120,100,50,.12), 0 6px 14px rgba(90,70,20,.07); display: flex; flex-direction: column; gap: 10px; min-width: 0 }
+.ficha::before { content: ""; position: absolute; top: -9px; left: 22px; width: 70px; height: 18px; background: var(--leaf-l); opacity: .9; transform: rotate(-3deg); border-radius: 2px }
+.ficha h2 { font-size: 26px }
+.ficha p { margin: 0 }
+.label { font-size: 13px; color: var(--muted); letter-spacing: .05em; text-transform: uppercase }
+ol.passos { margin: 0; padding-left: 22px; display: grid; gap: 6px }
+.duas { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 14px }
+.duas > div { min-width: 0 }
+.arv { display: grid; gap: 14px }
+.arv article { border-top: 1.5px dashed var(--line); padding-top: 12px; display: grid; gap: 4px }
+.arv article:first-child { border-top: 0; padding-top: 0 }
+.arv h3 { font-size: 21px }
+.arv .cient { font-size: 14px; color: var(--muted); font-style: italic }
+.galeria { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 14px }
+figure { margin: 0; background: var(--paper); border: 1.5px solid var(--line); border-radius: 6px; padding: 8px 8px 10px; transform: rotate(var(--r, 0deg)) }
+figure .foto { aspect-ratio: 4/5; max-width: 100%; border-radius: 3px; background: var(--leaf-l); display: grid; place-items: center }
+figure .foto svg { width: 46%; height: auto }
+figcaption { font-size: 13px; line-height: 1.3; margin-top: 8px }
+figcaption b { display: block; font-size: 14px }
+.exemplo { display: inline-block; font-size: 12px; background: var(--flower); color: #2f2a10; border-radius: 6px; padding: 1px 7px; vertical-align: middle }
+.frase { background: var(--paper); border: 1.5px dashed var(--line); border-radius: 10px; padding: 12px; font-size: 15px }
+footer { text-align: center; font-size: 15px; color: var(--muted); padding-top: 6px }
+footer b { color: var(--ink) }
+@media (prefers-reduced-motion: reduce) { * { transition: none !important } }
+figure img { display: block; width: 100%; aspect-ratio: 4/5; object-fit: cover; border-radius: 3px }
+.nota { font-size: 14px; color: var(--muted) }

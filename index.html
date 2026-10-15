@@ -3,51 +3,87 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<script>
+// Quem abre pelo ícone do app instalado vai direto para o app (o ícone antigo abria esta página).
+(function () { try {
+  var app = (window.matchMedia && matchMedia('(display-mode: standalone)').matches) || navigator.standalone;
+  if (app && location.search.indexOf('site') < 0) location.replace('/app/' + location.hash);
+} catch (e) {} })();
+</script>
 <title>Árvores Urbanas</title>
-<meta name="description" content="Caderno de campo para registrar as árvores por onde você passa: foto, GPS, espécie e mapa no Google Earth.">
+<meta name="description" content="Caderno de campo das árvores da cidade: app gratuito, textos sobre árvores e galeria de fotos com crédito de quem fotografou. Por @paulapmiranda.">
 <meta name="theme-color" content="#4f7a3b">
-<meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-title" content="Árvores">
-<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta property="og:title" content="Árvores Urbanas">
+<meta property="og:description" content="Caderno de campo das árvores da cidade. App gratuito, textos e galeria de fotos.">
+<meta property="og:image" content="https://arvoresurbanas.com.br/app/icons/icon-512.png">
 <link rel="manifest" href="manifest.webmanifest">
-<link rel="icon" href="icons/icon-32.png" sizes="32x32">
-<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
-<link rel="preload" href="fonts/Mali-Regular.ttf" as="font" type="font/ttf" crossorigin>
-<link rel="preload" href="fonts/Mali-Bold.ttf" as="font" type="font/ttf" crossorigin>
-<link rel="stylesheet" href="style.css">
+<link rel="icon" href="app/icons/icon-32.png" sizes="32x32">
+<link rel="apple-touch-icon" href="app/icons/apple-touch-icon.png">
+<link rel="stylesheet" href="site.css">
 </head>
 <body>
-<div id="splash" aria-hidden="true"><div class="sp-in"><img src="icons/icon-192.png" alt="" width="112" height="112"><div class="sp-name">Árvores Urbanas</div><div class="sp-sub">caderno de campo</div></div><div class="sp-credit">Criado por @paulapmiranda<br><small>© 2026 · todos os direitos reservados</small></div></div>
-<div id="app"><div class="page"><div class="empty"><div class="big">Árvores Urbanas</div><p>Abrindo o caderno…</p></div></div></div>
-<noscript><p style="padding:20px">Este app precisa do JavaScript ligado no navegador.</p></noscript>
-<script>
-(function () {
-  var t0 = Date.now(), MIN = 3000, done = false;
-  window.AC = window.AC || {};
-  window.AC.hideSplash = function () {
-    if (done) return; done = true;
-    var left = Math.max(0, MIN - (Date.now() - t0));
-    setTimeout(function () {
-      var s = document.getElementById('splash'); if (!s) return;
-      s.classList.add('off'); setTimeout(function () { if (s.parentNode) s.parentNode.removeChild(s); }, 500);
-    }, left);
-  };
-  setTimeout(function () { window.AC.hideSplash(); }, 7000);
-})();
-</script>
-<script src="geo.js"></script>
-<script src="zip.js"></script>
-<script src="db.js"></script>
-<script src="ui.js"></script>
-<script src="species.js"></script>
-<script src="stamp.js"></script>
-<script src="place.js"></script>
-<script src="export.js"></script>
-<script src="map.js"></script>
-<script src="app.js"></script>
-<script src="form.js"></script>
-<script src="more.js"></script>
-<script src="help.js"></script>
+<div class="wrap">
+  <nav aria-label="Seções">
+    <a href="#projeto">O projeto</a><a href="#app">O app</a><a href="#arvores">Árvores</a><a href="#galeria">Galeria</a><a href="#enviar">Enviar foto</a>
+  </nav>
+
+  <header class="hero">
+    <span class="eyebrow">Cachoeiro de Itapemirim · ES · desde 2026</span>
+    <h1>Árvores <em>Urbanas</em></h1>
+    <p>Um caderno de campo das árvores bonitas que a gente encontra pelas ruas: onde estão, quando florescem, quem as fotografou.</p>
+    <div class="btns">
+      <a class="btn" href="app/">Abrir o app</a>
+      <a class="btn sec" href="#galeria">Ver a galeria</a>
+    </div>
+  </header>
+
+  <section class="ficha" id="projeto">
+    <span class="label">O projeto</span>
+    <h2>Olhar para cima</h2>
+    <p>Toda cidade tem árvores que param a gente na calçada: o ipê que amarela a rua em agosto, a sibipiruna da praça, a mangueira antiga do quintal da esquina. O Árvores Urbanas nasceu para registrar essas árvores com foto, lugar e data, e para dividir esse olhar com quem também gosta delas.</p>
+    <p>Aqui você encontra o app gratuito para fazer o seu próprio caderno, textos sobre as árvores e uma galeria de fotos, sempre com o nome de quem fotografou.</p>
+  </section>
+
+  <section class="ficha" id="app">
+    <span class="label">O app · gratuito</span>
+    <h2>Seu caderno de campo no celular</h2>
+    <p>Tire a foto, o app marca o lugar pelo GPS, sugere a espécie e guarda tudo no seu celular. Funciona sem internet e mostra suas árvores no mapa e no Google Earth.</p>
+    <div class="duas">
+      <div><b>Android (Chrome)</b>
+        <ol class="passos"><li>Toque em <b>Abrir o app</b> (ou em <b>Instalar no celular</b>, quando aparecer).</li><li>No menu do Chrome (três pontinhos), toque em <b>Instalar app</b>.</li><li>Confirme em <b>Instalar</b>.</li></ol></div>
+      <div><b>iPhone (Safari)</b>
+        <ol class="passos"><li>Toque em <b>Abrir o app</b>.</li><li>Toque em <b>Compartilhar</b>.</li><li>Escolha <b>Adicionar à Tela de Início</b>.</li></ol></div>
+    </div>
+    <div class="btns"><a class="btn" href="app/">Abrir o app</a><button class="btn sec" id="instalar" type="button" hidden>Instalar no celular</button></div>
+    <p class="nota">Suas árvores ficam só no seu celular. Faça backup de vez em quando.</p>
+  </section>
+
+  <section class="ficha" id="arvores">
+    <span class="label">Árvores</span>
+    <h2>Conversas sobre árvores</h2>
+    <div class="arv" id="lista-arvores"></div>
+  </section>
+
+  <section class="ficha" id="galeria">
+    <span class="label">Galeria</span>
+    <h2>Fotos de quem passa e repara</h2>
+    <p>Cada foto leva o nome de quem tirou. Nada é publicado sem autorização.</p>
+    <div class="galeria" id="lista-fotos"></div>
+  </section>
+
+  <section class="ficha" id="enviar">
+    <span class="label">Participe</span>
+    <h2>Mande a sua foto</h2>
+    <p>Fotografou uma árvore bonita? Mande para a Paula pelo WhatsApp ou Instagram <b>@paulapmiranda</b>, com o nome da árvore (se souber), o lugar e o nome que deve aparecer no crédito. Junto, copie e responda esta frase:</p>
+    <div class="frase" id="frase">Autorizo o projeto Árvores Urbanas (@paulapmiranda) a publicar esta foto no site arvoresurbanas.com.br e nas redes do projeto, com o crédito “Foto: [seu nome]”. Posso pedir a retirada quando quiser.</div>
+    <div class="btns"><button class="btn sec" id="copiar" type="button">Copiar a frase</button></div>
+  </section>
+
+  <footer>Criado por <b>@paulapmiranda</b> · © 2026 · arvoresurbanas.com.br</footer>
+</div>
+
+<noscript><p class="wrap">Textos e fotos precisam do JavaScript ligado no navegador.</p></noscript>
+<script src="conteudo.js"></script>
+<script src="site.js"></script>
 </body>
 </html>

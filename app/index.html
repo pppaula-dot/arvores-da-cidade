@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Árvores Urbanas</title>
+<meta name="description" content="Caderno de campo para registrar as árvores por onde você passa: foto, GPS, espécie e mapa no Google Earth.">
+<meta name="theme-color" content="#4f7a3b">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Árvores">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<link rel="manifest" href="../manifest.webmanifest">
+<link rel="icon" href="icons/icon-32.png" sizes="32x32">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<link rel="preload" href="fonts/Mali-Regular.ttf" as="font" type="font/ttf" crossorigin>
+<link rel="preload" href="fonts/Mali-Bold.ttf" as="font" type="font/ttf" crossorigin>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="splash" aria-hidden="true"><div class="sp-in"><img src="icons/icon-192.png" alt="" width="112" height="112"><div class="sp-name">Árvores Urbanas</div><div class="sp-sub">caderno de campo</div></div><div class="sp-credit">Criado por @paulapmiranda<br><small>© 2026 · todos os direitos reservados</small></div></div>
+<div id="app"><div class="page"><div class="empty"><div class="big">Árvores Urbanas</div><p>Abrindo o caderno…</p></div></div></div>
+<noscript><p style="padding:20px">Este app precisa do JavaScript ligado no navegador.</p></noscript>
+<script>
+(function () {
+  var t0 = Date.now(), MIN = 3000, done = false;
+  window.AC = window.AC || {};
+  window.AC.hideSplash = function () {
+    if (done) return; done = true;
+    var left = Math.max(0, MIN - (Date.now() - t0));
+    setTimeout(function () {
+      var s = document.getElementById('splash'); if (!s) return;
+      s.classList.add('off'); setTimeout(function () { if (s.parentNode) s.parentNode.removeChild(s); }, 500);
+    }, left);
+  };
+  setTimeout(function () { window.AC.hideSplash(); }, 7000);
+})();
+</script>
+<script src="geo.js"></script>
+<script src="zip.js"></script>
+<script src="db.js"></script>
+<script src="ui.js"></script>
+<script src="species.js"></script>
+<script src="stamp.js"></script>
+<script src="place.js"></script>
+<script src="export.js"></script>
+<script src="map.js"></script>
+<script src="app.js"></script>
+<script src="form.js"></script>
+<script src="more.js"></script>
+<script src="help.js"></script>
+</body>
+</html>

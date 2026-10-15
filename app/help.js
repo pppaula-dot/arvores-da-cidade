@@ -28,11 +28,14 @@
       'Os dados ficam só no seu celular.', 'Faça backup de vez em quando: <b>Fazer agora</b> na tela inicial.',
       'Guarde o arquivo no Drive, OneDrive ou mande para você mesma.', 'Troca de celular? Restaure o backup no app novo.'] },
     { c: '#5b6b73', t: 'Instalar e usar sem internet', l: [
-      'Android: menu do Chrome › <b>Instalar app</b>.', 'iPhone: Compartilhar › <b>Adicionar à Tela de Início</b>.',
+      'Abra <b>arvoresurbanas.com.br</b> e toque em <b>Abrir o app</b>.', 'Android: menu do Chrome › <b>Instalar app</b>.', 'iPhone: Compartilhar › <b>Adicionar à Tela de Início</b>.',
       'Depois de instalado, funciona sem internet.', 'Cidade e bairro são descobertos quando a internet voltar.'] },
   ];
   const DONTS = ['Não apague o app sem fazer backup.', 'Não limpe os dados do navegador sem backup.', 'Não precisa ficar online para cadastrar.'];
   const CHANGES = [
+    { v: 'V3', d: '15/10/2026', l: [
+      'Novo <b>site</b> em arvoresurbanas.com.br, com o projeto, textos sobre árvores e galeria de fotos. <i>Como usar:</i> abra o endereço no navegador, ou toque no link no fim da tela inicial do app.',
+      'O app agora fica em <b>arvoresurbanas.com.br/app</b>. <i>Como usar:</i> nada muda para quem já instalou. O ícone continua abrindo o app e suas árvores continuam lá.'] },
     { v: 'V2', d: '14/10/2026', l: [
       'Nova faixa <b>Como usar e novidades</b> na tela inicial. <i>Como usar:</i> toque nela para ver os primeiros passos, o manual e o que mudou. Ela mostra “Novo” quando há novidade.',
       'Botão <b>Todas no Google Earth</b>. <i>Como usar:</i> na tela inicial, toque nele, depois em <b>Abrir no Earth</b> e escolha o Google Earth. Todas as árvores aparecem no mapa.'] },
@@ -41,7 +44,7 @@
   ];
 
   const STEPS = [
-    '<b>Instale o app:</b> abra o link no Chrome (Android) e toque em <b>Instalar o app</b>. No iPhone, use o Safari: Compartilhar › Adicionar à Tela de Início.',
+    '<b>Instale o app:</b> abra <b>arvoresurbanas.com.br</b>, toque em <b>Abrir o app</b> e, no Chrome (Android), toque em <b>Instalar o app</b>. No iPhone, use o Safari: Compartilhar › Adicionar à Tela de Início.',
     '<b>Cadastre a primeira árvore:</b> toque em <b>Nova árvore</b> e tire uma foto. Permita o GPS quando o celular pedir.',
     '<b>Confira os dados:</b> o app preenche cidade, bairro e rua sozinho. Escreva o nome da árvore, ou deixe em branco se não souber.',
     '<b>Veja no mapa:</b> volte à tela inicial e entre na cidade, ou toque em <b>Todas no Google Earth</b>.',

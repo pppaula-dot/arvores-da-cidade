@@ -5,7 +5,7 @@
   const AC = (root.AC = root.AC || {});
   const { esc, icon, starIcon, toast, sheet, confirmBox, urlOf } = AC.ui;
   const G = AC.geo;
-  const VERSION = 'V2';
+  const VERSION = 'V3';
   AC.VERSION = VERSION;
 
   const S = (AC.S = {
@@ -161,7 +161,7 @@
     }
     if (S.deferredPrompt) h += '<div class="card"><h3>Instalar na tela inicial</h3><p class="note">Abre como um aplicativo, sem barra do navegador, e funciona sem internet.</p><button class="btn block" data-act="install">Instalar o app</button></div>';
     else if (/iphone|ipad|ipod/i.test(navigator.userAgent) && !navigator.standalone) h += '<div class="card"><h3>Instalar no iPhone</h3><p class="note">Toque em <b>Compartilhar</b> (quadrado com seta) e depois em <b>Adicionar à Tela de Início</b>.</p></div>';
-    h += '<p class="credit">Criado por @paulapmiranda · © ' + new Date().getFullYear() + '</p></main><button class="btn fab" data-act="new-tree">' + icon('plus') + ' Nova árvore</button>';
+    h += '<p class="credit">Criado por @paulapmiranda · © ' + new Date().getFullYear() + '<br><a href="/?site">arvoresurbanas.com.br</a></p></main><button class="btn fab" data-act="new-tree">' + icon('plus') + ' Nova árvore</button>';
     view().innerHTML = h;
     const inp = document.getElementById('homeSearch');
     if (inp) inp.addEventListener('input', () => {
